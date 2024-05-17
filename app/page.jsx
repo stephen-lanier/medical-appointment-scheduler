@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { getCourses, getRegistrations, getDetailedRegistrations } from "./server";
+import { getAppts, getPatientName } from "./server";
 
 export default async function Home() {
 
-    let coursesData = await getCourses();
-    let registrationsData = await getRegistrations();
-    let detailedRegistrationData = await getDetailedRegistrations();
+    let patientID = 1;
+    let apptsData = await getAppts(patientID);
+    let patientName = await getPatientName(patientID);
 
     return (
         <main className="font-mono text-slate-800 p-5 bg-slate-50">
@@ -32,53 +32,32 @@ export default async function Home() {
 
 
             <div className="py-10">
-                <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Courses</h1>
+                <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Appointments for <b>{patientName}</b></h1>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-5">
                     <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">
                             <tr>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Course ID</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Course Name</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Physician</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Date</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Start Time</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>End Time</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {coursesData.map(x => {
+                            {apptsData.map(x => {
                                 return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td className='px-6 py-3'>{x.course_id}</td>
-                                    <td className='px-6 py-3'>{x.subject_name}</td>
+                                    <td className='px-6 py-3'>{x.PhysicianID}: {x.Name}</td>
+                                    <td className='px-6 py-3'>{x.Date.toDateString()}</td>
+                                    <td className='px-6 py-3'>{x.StartTime}</td>
+                                    <td className='px-6 py-3'>{x.EndTime}</td>
+                                    <td className='px-6 py-3'>{x.AppointmentStatus}</td>
                                 </tr>);
                             })}
                         </tbody>
                     </table>
                 </div>
             </div>
-
-            <div className="py-10">
-                <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Registrations</h1>
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-5">
-                    <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">
-                            <tr>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Student ID</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>First Name</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Last Name</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Subject Name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {detailedRegistrationData.map(x => {
-                                return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td className='px-6 py-3'>{x.student_id}</td>
-                                    <td className='px-6 py-3'>{x.first_name}</td>
-                                    <td className='px-6 py-3'>{x.last_name}</td>
-                                    <td className='px-6 py-3'>{x.subject_name}</td>
-                                </tr>);
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </main>
     );
 }
