@@ -12,7 +12,6 @@ var connectionConfig = {
     password: process.env.MYSQL_ROOT_PASSWORD,
     database: 'appointments'
 };
-
 const rawFp = 'data/raw.csv';
 const specialtiesFp = 'data/specialties.csv'
 let results = [];
@@ -27,20 +26,30 @@ let days = Array.from({ length: 30 }, (x, i) => i + 1);
 let months = Array.from({ length: 12 }, (x, i) => i + 1);
 
 
-// load Specialization table
-// fs.createReadStream(specialtiesFp)
-//     .pipe(stripBomStream())
-//     .pipe(csv())
-//     .on('data', (data) => results.push(data))
-//     .on('end', () => {
-//         insertSpecialties(pairs);
-//     });
+fs.createReadStream(specialtiesFp)              // first load specialties data file
+    .pipe(stripBomStream())
+    .pipe(csv())
+    .on('data', (data) => results.push(data))
+    .on('end', () => {
+        insertSpecialties()                     // insert into DB specialties table
+            .then(() => {
+                results = [];
+                fs.createReadStream(rawFp)      // load raw appointment data
+                    .pipe(stripBomStream())
+                    .pipe(csv())
+                    .on('data', (data) => results.push(data))
+                    .on('end', () => {
+                        console.log('raw data loaded.');
+                        getDists();             // generate distribution data (3% general practictioner, etc.) for below
+                        generatePhysiciansTable(700)        // generate mock data and insert into DB physicians table
+                            .then(() => generatePatientsTable(20000))   // generate mock data and insert into DB patients table
+                            .then(() => generateAppointmentsTable());   // generate mock data and insert into DB appointments table
+                    });
+            });
+    });
 
 async function insertSpecialties() {
-    let pairs = results.map(x => {
-        return '(' + x.ID + ', "' + x.SPECIALTY + '")';
-    })
-    results = [];
+    let pairs = results.map(x => '(' + x.ID + ', "' + x.SPECIALTY + '")');
 
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
@@ -48,30 +57,13 @@ async function insertSpecialties() {
             console.error('error connecting: ' + err.stack);
             return;
         }
-        console.log('connected to database!');
+        // console.log('connected to database!');
     });
 
     let res = await connection.promise().query('insert into Specializations values ' + pairs.join(', '));
     connection.end();
     console.log(`inserted ${res[0].affectedRows} row(s) into Specializations`);
 }
-
-// load raw data and get distributions for age, specialization, sex
-fs.createReadStream(rawFp)
-    .pipe(stripBomStream())
-    .pipe(csv())
-    .on('data', (data) => results.push(data))
-    .on('end', () => {
-        getDists();
-        generatePhysiciansTable(1)
-            .then(
-                () => generatePatientsTable(1)
-            )
-            .then(
-                () => generateAppointmentsTable()
-            );
-    });
-
 
 function getDists() {
     results.map(x => {
@@ -91,6 +83,7 @@ function getDists() {
         sexDist[sex] /= results.length;
         sexes = sexes.concat(Array(Math.ceil(sexDist[sex] * 1000)).fill(sex));
     }
+    console.log('distributions loaded.');
 }
 
 async function generatePhysiciansTable(n) {
@@ -152,7 +145,6 @@ async function generatePatientsTable(n) {
 }
 
 async function generateAppointmentsTable() {
-    let pairs = [];
     let bar = new ProgressBar('  preparing appointments table\t [:bar] :rate/bps :percent :etas', {
         complete: '=',
         incomplete: ' ',
@@ -182,9 +174,8 @@ async function generateAppointmentsTable() {
         let pair = `('Pending', ${getRandom(physicians)}, ${getRandom(patients)}, '2024-${m}-${d}', CURRENT_TIME(), ADDTIME(CURRENT_TIME(), 3000))`;
         let sql = `insert into Appointments (AppointmentStatus, PhysicianID, PatientID, Date, StartTime, EndTime) values ` + pair;
         let res = await connection.promise().query(sql);
-        // pairs.push(pair);
     }
-    
+
     connection.end();
     console.log(`inserted ${results.length} row(s) into Appointments`);
 
@@ -245,19 +236,3 @@ function getRandomDate() {
     day = (month === '02' && ['29', '30'].includes(day)) ? '28' : day;
     return (month + '-' + day);
 }
-
-// load random physicians from especialidad
-// load random ID
-// if ID already in system and specializations DO match:
-// continue;
-// else if ID already in system and specializations DON'T match:
-// regenerate random ID try again
-// else
-// insert w/ random name
-// load random patients from edad
-// if ID already in system adn edads DO match:
-// continue;
-// else if ID already in system and edads DON'T match:
-// regenerate random ID try again
-// else
-// insert w/ random name
