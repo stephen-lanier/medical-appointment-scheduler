@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { getCourses, getRegistrations } from "./server";
+import { getCourses, getRegistrations, getDetailedRegistrations } from "./server";
 
 export default async function Home() {
 
     let coursesData = await getCourses();
     let registrationsData = await getRegistrations();
+    let detailedRegistrationData = await getDetailedRegistrations();
 
     return (
         <main className="font-mono text-slate-800 p-5 bg-slate-50">
@@ -36,8 +37,8 @@ export default async function Home() {
                     <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">
                             <tr>
-                                <th scope='col' className='px-6 py-3'>Course ID</th>
-                                <th scope='col' className='px-6 py-3'>Course Name</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Course ID</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Course Name</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,19 +59,19 @@ export default async function Home() {
                     <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">
                             <tr>
-                                <th scope='col' className='px-6 py-3'>Student ID</th>
-                                <th scope='col' className='px-6 py-3'>Group ID</th>
-                                <th scope='col' className='px-6 py-3'>Date</th>
-                                <th scope='col' className='px-6 py-3'>Time</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Student ID</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>First Name</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Last Name</th>
+                                <th scope='col' className='px-6 py-3 tracking-widest'>Subject Name</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {registrationsData.map(x => {
+                            {detailedRegistrationData.map(x => {
                                 return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td className='px-6 py-3'>{x.student_id}</td>
-                                    <td className='px-6 py-3'>{x.group_id}</td>
-                                    <td className='px-6 py-3'>{`${x.date}`}</td>
-                                    <td className='px-6 py-3'>{x.time}</td>
+                                    <td className='px-6 py-3'>{x.first_name}</td>
+                                    <td className='px-6 py-3'>{x.last_name}</td>
+                                    <td className='px-6 py-3'>{x.subject_name}</td>
                                 </tr>);
                             })}
                         </tbody>

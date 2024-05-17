@@ -2,6 +2,7 @@
   "name": "medical-appointment-scheduler",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -22,12 +23,15 @@
     "@babel/preset-env": "^7.24.5",
     "@babel/preset-react": "^7.24.1",
     "autoprefixer": "^10.4.19",
+    "csv-parser": "^3.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "eslint-config-prettier": "^9.1.0",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
+    "progress": "^2.0.3",
+    "strip-bom-stream": "^5.0.0",
     "tailwindcss": "^3.4.1"
   }
 }
