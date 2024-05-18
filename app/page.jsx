@@ -1,61 +1,47 @@
 import Image from "next/image";
-import { getAppts, getPatientName } from "./server";
+import Link from "next/link";
 
 export default async function Home() {
-
-    let patientID = 1;
-    let apptsData = await getAppts(patientID);
-    let patientName = await getPatientName(patientID);
-
     return (
-        <main className="font-mono text-slate-800 p-5 bg-slate-50">
-            <div className="">
-                <div className="">
-                    <a
-                        className=""
-                        href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        built with{" "}
-                        <Image
-                            src="/next.svg"
-                            alt="nextjs Logo"
-                            className="dark:invert"
-                            width={100}
-                            height={24}
-                            priority
-                        />
-                    </a>
-                </div>
+        <main className="flex min-h-screen flex-col p-6 font-mono uppercase">
+            <div className="flex h-20 shrink-0 items-end justify-end rounded-lg bg-slate-400 p-4 md:h-52">
+                <Image src="/next.svg"
+                    alt="nextjs Logo"
+                    className="dark:invert invert"
+                    width={100}
+                    height={24}
+                    priority
+                />
             </div>
-
-
-            <div className="py-10">
-                <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Appointments for <b>{patientName}</b></h1>
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-5">
-                    <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">
-                            <tr>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Physician</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Date</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Start Time</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>End Time</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {apptsData.map(x => {
-                                return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td className='px-6 py-3'>{x.PhysicianID}: {x.Name}</td>
-                                    <td className='px-6 py-3'>{x.Date.toDateString()}</td>
-                                    <td className='px-6 py-3'>{x.StartTime}</td>
-                                    <td className='px-6 py-3'>{x.EndTime}</td>
-                                    <td className='px-6 py-3'>{x.AppointmentStatus}</td>
-                                </tr>);
-                            })}
-                        </tbody>
-                    </table>
+            <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
+                <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
+                    {/* <div className={styles.shape} /> */}
+                    <p className={`text-xl text-gray-800 md:text-3xl md:leading-normal font-mono uppercase`}>
+                        <strong>Medical Appointment Scheduler</strong> <br />
+                        E Team <br /> CPSC 5021 <br /> Spring 2024
+                    </p>
+                    <Link
+                        href="/dashboard"
+                        className="flex items-center gap-5 self-start rounded-lg bg-slate-400 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-slate-300 md:text-base"
+                    >
+                        <span>Log in</span>
+                        {/* <ArrowRightIcon className="w-5 md:w-6" /> */}
+                    </Link>
+                </div>
+                <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
+                    {/* <Image
+                        src="/hero-desktop.png"
+                        width={1000}
+                        height={760}
+                        className="hidden md:block"
+                        alt="Screenshots of the dashboard project showing desktop version"
+                    />
+                    <Image
+                        src="/hero-mobie.png"
+                        width={560}
+                        height={620}
+                        alt="Screenshots of the dashboard project showing desktop version"
+                    /> */}
                 </div>
             </div>
         </main>
