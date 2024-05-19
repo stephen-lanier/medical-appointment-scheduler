@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { TableCellsIcon, CalendarDaysIcon, XCircleIcon } from '@heroicons/react/24/outline'
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Create', href: '/dashboard/create' },
-    { name: 'Cancel', href: '/dashboard/cancel' }
+    { name: 'Dashboard', href: '/dashboard', icon: TableCellsIcon },
+    { name: 'Create', href: '/dashboard/create', icon: CalendarDaysIcon },
+    { name: 'Cancel', href: '/dashboard/cancel', icon: XCircleIcon }
     // {
     //     name: 'Invoices',
     //     href: '/dashboard/invoices',
@@ -22,6 +23,7 @@ export default function NavLinks() {
     return (
         <>
             {links.map((link) => {
+                const LinkIcon = link.icon;
                 return (
                     <Link
                         key={link.name}
@@ -33,6 +35,7 @@ export default function NavLinks() {
                             },
                         )}
                     >
+                        <LinkIcon className='w-6'/>
                         <p className="hidden md:block">{link.name}</p>
                     </Link>
                 );
