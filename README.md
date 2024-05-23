@@ -29,7 +29,9 @@ Now you're ready to start working!
 ## Learn More
 
 - [Git](https://gist.github.com/brandon1024/14b5f9fcfd982658d01811ee3045ff1e) - learn about version control
-    - [Git and GitHub for Collaboration](https://www.youtube.com/watch?v=MnUd31TvBoU) - a video on using GitHub on a team
+    - [Git and GitHub for Beginners](https://www.youtube.com/watch?v=RGOj5yH7evk) (~1 hr video)
+    - [Git for Professionals](https://www.youtube.com/watch?v=Uszj_k0DGsg) (~40 min video)
+    - [Git and GitHub for Collaboration](https://www.youtube.com/watch?v=MnUd31TvBoU) (~15 min video)
     - [practice using Git](https://www.freecodecamp.org/learn/relational-database/learn-git-by-building-an-sql-reference-object/build-an-sql-reference-object) in the context of a similar application that features an app-database interface
 
 - [JavaScript](https://github.com/mbeaudru/modern-js-cheatsheet) - learn about JS (should be easier getting started than it was with Java, C++)
