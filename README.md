@@ -23,6 +23,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Starting Work
 Before you get started working on anything, run `git checkout -b [your-name]/first`. You should see a message in the terminal similar to this: 
 
+![example of git branch](/public/git-branch-example.png)
 
 Now you're ready to start working!
 
