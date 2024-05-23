@@ -1,36 +1,41 @@
+# This is the group project for Team E, CPSC 5021 Database Systems, Spring Quarter 2024
+
+**An appointment scheduler intended for a medical setting.**
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Prerequisites
+- [Node.js](https://nodejs.org/en)
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [GitHub](https://github.com/) account
 
-First, run the development server:
+## Setting Up
+- Once you've cloned this repository into a local repository, open a terminal at your local repo and run `npm i` to install all dependencies.
+- Use MySQLWorkbench to open and run `/load-data/initialization.sql` to setup the necessary MySQL database on your machine.
+- Create a file named `.env` in the project root folder and fill in the details specific to your local database 
+    - see `.env.example` for the required values
+- Using the terminal running at the root of your local repo, run `node load-data/load-data.js` to populate your database.
+- To see the project's UI
+    - `npm run dev` in the terminal 
+    - open [http://localhost:3000](http://localhost:3000) with your browser to see the result
+- All of the database-application CRUD functionality is in `/app/server.js`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Starting Work
+Before you get started working on anything, run `git checkout -b [your-name]/first`. You should see a message in the terminal similar to this: 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Now you're ready to start working!
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Git](https://gist.github.com/brandon1024/14b5f9fcfd982658d01811ee3045ff1e) - learn about version control
+    - [Git and GitHub for Collaboration](https://www.youtube.com/watch?v=MnUd31TvBoU) - a video on using GitHub on a team
+    - [practice using Git](https://www.freecodecamp.org/learn/relational-database/learn-git-by-building-an-sql-reference-object/build-an-sql-reference-object) in the context of a similar application that features an app-database interface
+
+- [JavaScript](https://github.com/mbeaudru/modern-js-cheatsheet) - learn about JS (should be easier getting started than it was with Java, C++)
+    - [JS Cheat Sheet](https://htmlcheatsheet.com/js/)
+    - [Leetcode](https://leetcode.com/) - use Leetcode to practice solving small (or large) problems using JS
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    - [Learn React](https://nextjs.org/learn/react-foundations) - an interactive React tutorial.
+    - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
