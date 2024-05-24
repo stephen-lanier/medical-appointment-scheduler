@@ -55,36 +55,3 @@ create table Vacations (
     VacationStatus varchar(20),
     Reason varchar(50)
 );
-
-
-
-insert into Products values ('012345678901',
-'Strawberry ice cream',
-'1 liter container with organic ice cream, strawberry flavor',
-100,
-5.49
-);
-insert into Products values ('012345678902',
-'Vanilla ice cream',
-'1 liter container with organic ice cream, vanilla flavor',
-2,
-5.49
-);
-insert into Products values ('012345678903',
-'Chocolate ice cream',
-'1 liter container with organic ice cream, chocolate flavor',
-100,
-5.49
-);
-insert into Products values ('112345678901',
-'Chocolate box',
-'1 pound box, 20 pieces of gourmet dark chocolate truffles',
-50,
-19.99
-);
-insert into Customers values (1, 'Bruno Guardia');
-insert into ShoppingCart values (1, '112345678901', 1, 19.99, 19.99);
-insert into ShoppingCart values (1, '012345678902', 3, 5.49, 16.47);
-select * from Products;
-select * from Customers;
-select * from ShoppingCart;
