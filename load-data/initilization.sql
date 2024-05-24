@@ -1,22 +1,5 @@
 create database appointments;
 use appointments;
-select * from appointments;
-
-select * from appointments
-where date > '2024-05-01';
-
-select s.description, count(*) 
-from physicians p
-join specializations s on p.specializationid=s.specializationid
-group by 1
-order by 2 desc;
-
-select s.description, count(*)
-from appointments a
-join physicians p on a.physicianid=p.physicianid
-join specializations s on p.specializationid=s.specializationid
-group by 1
-order by 2 desc;
 
 create table Patients (
 	PatientID serial primary key,
