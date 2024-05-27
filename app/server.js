@@ -10,7 +10,29 @@ var connectionConfig = {
     database: 'appointments'
 };
 
-export async function getAppts(userID) {
+
+// export async function getAppts(userID) {
+//     noStore();
+//     let connection = mysql.createConnection(connectionConfig);
+//     connection.connect(function (err) {
+//         if (err) {
+//             console.error('error connecting: ' + err.stack);
+//             return;
+//         }
+//         console.log('connected to database!');
+//     });
+//     let sql = `select * from appointments a
+//     join physicians p
+//     using (physicianid)
+//     where patientid=${userID}
+//     order by date desc`;
+//     let results = await connection.promise().query(sql);
+//     // console.log(results[0])
+//     connection.end();
+//     return results[0];
+// }
+
+export async function getAppts(username) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
@@ -20,13 +42,15 @@ export async function getAppts(userID) {
         }
         console.log('connected to database!');
     });
-    let sql = `select * from appointments a
+    let sql = `select *, p.name as PhysicianName, pa.name as PatientName from appointments a
     join physicians p
     using (physicianid)
-    where patientid=${userID}
-    order by date desc`;
+    join patients pa
+    using (patientid)
+    where pa.name like '%${username}%'
+    order by pa.name, p.name, date desc, starttime desc, endtime desc`;
     let results = await connection.promise().query(sql);
-    // console.log(results[0])
+    console.log(results[0])
     connection.end();
     return results[0];
 }

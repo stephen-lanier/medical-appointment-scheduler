@@ -9,8 +9,8 @@ import { TableCellsIcon, CalendarDaysIcon, XCircleIcon } from '@heroicons/react/
 // Depending on the size of the application, this would be stored in a database.
 const links = [
     { name: 'Dashboard', href: '/dashboard', icon: TableCellsIcon },
-    { name: 'Create', href: '/dashboard/create', icon: CalendarDaysIcon },
-    { name: 'Cancel', href: '/dashboard/cancel', icon: XCircleIcon }
+    { name: 'Appointments', href: '/dashboard/appointments', icon: CalendarDaysIcon },
+    { name: 'Vacations', href: '/dashboard/vacations', icon: XCircleIcon }
     // {
     //     name: 'Invoices',
     //     href: '/dashboard/invoices',

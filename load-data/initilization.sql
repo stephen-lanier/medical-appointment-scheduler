@@ -38,3 +38,7 @@ create table Vacations (
     VacationStatus varchar(20),
     Reason varchar(50)
 );
+
+-- trigger: insertion on appointments, check that physician/time not already blocked
+-- user roles?
+

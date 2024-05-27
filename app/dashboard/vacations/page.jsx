@@ -1,4 +1,4 @@
-export default async function CreateAppointment() {
+export default async function Page() {
 
     return (
         <main className="font-mono text-slate-800 p-5 bg-slate-50 uppercase">
@@ -8,7 +8,7 @@ export default async function CreateAppointment() {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        create appointment
+                        Vacations
                     </a>
         </main>
     );
