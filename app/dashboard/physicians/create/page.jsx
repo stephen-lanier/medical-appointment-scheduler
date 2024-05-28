@@ -14,12 +14,12 @@ export default async function Page() {
     return (
         <main className="font-mono text-slate-800 p-5 bg-slate-50 uppercase">
             <div className="flex">
-                {/* <h1>Create Appointment</h1> */}
+                {/* <h1>Create Physician</h1> */}
                 <form action={createPhysician}>
                     <div className="rounded-md bg-gray-50 p-4 md:p-6">
                         {/* Name */}
                         <div className="mb-4">
-                            <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+                            <label htmlFor="name" className="mb-2 block text-sm font-medium">
                                 Enter Physician Name
                             </label>
                             <div className="relative mt-2 rounded-md">
@@ -37,13 +37,13 @@ export default async function Page() {
                         </div>
                         {/* Specialization */}
                         <div className="mb-4">
-                            <label htmlFor="patient" className="mb-2 block text-sm font-medium">
+                            <label htmlFor="specialization" className="mb-2 block text-sm font-medium">
                                 Select specialization
                             </label>
                             <div className="relative">
                                 <select
-                                    id="patient"
-                                    name="patientId"
+                                    id="specializationid"
+                                    name="specializationid"
                                     className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                     defaultValue=""
                                 >
@@ -62,7 +62,7 @@ export default async function Page() {
 
                         {/* Contact Info */}
                         <div className="mb-4">
-                            <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+                            <label htmlFor="contact" className="mb-2 block text-sm font-medium">
                                 Enter Contact Info
                             </label>
                             <div className="relative mt-2 rounded-md">

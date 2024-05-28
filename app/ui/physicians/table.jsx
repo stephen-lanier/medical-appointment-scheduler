@@ -14,6 +14,7 @@ export default async function Table({ query }) {
                         <tr>
                             <th scope='col' className='px-6 py-3 tracking-widest'>Physician</th>
                             <th scope='col' className='px-6 py-3 tracking-widest'>Specialization</th>
+                            <th scope='col' className='px-6 py-3 tracking-widest'>Contact Info</th>
                             <th scope="col" className="relative py-3 pl-6 pr-3">
                                 <span className="sr-only">Edit</span>
                             </th>
@@ -24,6 +25,7 @@ export default async function Table({ query }) {
                             return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td className='px-6 py-3'>{x.PhysicianID}: {x.Name}</td>
                                 <td className='px-6 py-3'>{x.Description}</td>
+                                <td className='px-6 py-3'>{x.ContactInfo}</td>
                                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                     <div className="flex justify-end gap-3">
                                         <UpdatePhysician id={x.PhysicianID} />

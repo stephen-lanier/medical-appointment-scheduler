@@ -117,7 +117,7 @@ export async function getAppts(username) {
     return results[0];
 }
 
-export async function getPatientName(userID) {
+export async function getPatientName(id) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
@@ -127,7 +127,24 @@ export async function getPatientName(userID) {
         }
         console.log('connected to database!');
     });
-    let sql = `select name from patients where patientid=${userID}`;
+    let sql = `select name from patients where patientid=${id}`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0][0].name)
+    connection.end();
+    return results[0][0].name;
+}
+
+export async function getPhysicianName(id) {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select name from physicians where physicianid=${id}`;
     let results = await connection.promise().query(sql);
     console.log(results[0][0].name)
     connection.end();
@@ -183,7 +200,6 @@ export async function deletePhysician(id) {
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/physicians');
-    redirect('/dashboard/physicians');
 }
 
 export async function createPatient(formData) {
@@ -213,23 +229,79 @@ export async function createPatient(formData) {
 export async function createPhysician(formData) {
     console.log(formData);
     const name = formData.get('name');
-    const specializationid = formData.get('specializiationid');
+    const specializationid = formData.get('specializationid');
     const contact = formData.get('contact');
     console.log(name, specializationid, contact);
-    // noStore();
-    // let connection = mysql.createConnection(connectionConfig);
-    // connection.connect(function (err) {
-    //     if (err) {
-    //         console.error('error connecting: ' + err.stack);
-    //         return;
-    //     }
-    //     console.log('connected to database!');
-    // });
-    // let sql = `INSERT INTO physicians (name, specializatoinid, contactinfo)
-    // values ('${name}', '${specializationid}', '${contactinfo}')`;
-    // let results = await connection.promise().query(sql);
-    // console.log(results[0])
-    // connection.end();
-    // revalidatePath('/dashboard/patients');
-    // redirect(`/dashboard/patients?query=${name}`);
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `INSERT INTO physicians (name, specializationid, contactinfo)
+    values ('${name}', '${specializationid}', '${contact}')`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0])
+    connection.end();
+    revalidatePath('/dashboard/physicians');
+    redirect(`/dashboard/physicians?query=${name}`);
+}
+
+export async function updatePatient(id, formData) {
+    noStore();
+    const name = formData.get('name');
+    const db_name = await getPatientName(id);
+    const contact = formData.get('contact');
+    const dob = formData.get('dob');
+
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+
+    let sql = `
+        UPDATE patients SET ` 
+        + (name ? `name='${name}' ` : '')
+        + (contact ? `contactinfo='${contact}' ` : '')
+        + (dob ? `dob='${dob}' ` : '')
+        + `WHERE patientid=${id}`;
+    let results = await connection.promise().query(sql);
+    connection.end();
+    revalidatePath('/dashboard/patients');
+    redirect(`/dashboard/patients?query=${db_name}`);
+}
+
+export async function updatePhysician(id, formData) {
+    noStore();
+    const name = formData.get('name');
+    const db_name = await getPhysicianName(id);
+    const specializationid = formData.get('specializationid');
+    const contact = formData.get('contact');
+
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+
+    let sql = `
+        UPDATE physicians SET ` 
+        + (name ? `name='${name}' ` : '')
+        + (contact ? `contactinfo='${contact}' ` : '')
+        + (specializationid ? `specializationid='${specializationid}' ` : '')
+        + `WHERE physicianid=${id}`;
+    let results = await connection.promise().query(sql);
+    connection.end();
+    revalidatePath('/dashboard/physicians');
+    redirect(`/dashboard/physicians?query=${db_name}`);
 }
