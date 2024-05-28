@@ -226,8 +226,8 @@ export async function deletePhysician(id) {
 
 export async function createPatient(formData) {
     console.log(formData);
-    const name = formData.get('name');
-    const contact = formData.get('contact');
+    const name = formData.get('name').trim();
+    const contact = formData.get('contact').trim();
     const dob = formData.get('dob');
     console.log(name, contact, dob);
     noStore();
@@ -250,9 +250,9 @@ export async function createPatient(formData) {
 
 export async function createPhysician(formData) {
     console.log(formData);
-    const name = formData.get('name');
+    const name = formData.get('name').trim();
     const specializationid = formData.get('specializationid');
-    const contact = formData.get('contact');
+    const contact = formData.get('contact').trim();
     console.log(name, specializationid, contact);
     noStore();
     let connection = mysql.createConnection(connectionConfig);
@@ -274,9 +274,9 @@ export async function createPhysician(formData) {
 
 export async function updatePatient(id, formData) {
     noStore();
-    const name = formData.get('name');
+    const name = formData.get('name').trim();
     const db_name = await getPatientName(id);
-    const contact = formData.get('contact');
+    const contact = formData.get('contact').trim();
     const dob = formData.get('dob');
 
     let connection = mysql.createConnection(connectionConfig);
@@ -302,10 +302,10 @@ export async function updatePatient(id, formData) {
 
 export async function updatePhysician(id, formData) {
     noStore();
-    const name = formData.get('name');
+    const name = formData.get('name').trim();
     const db_name = await getPhysicianName(id);
     const specializationid = formData.get('specializationid');
-    const contact = formData.get('contact');
+    const contact = formData.get('contact').trim();
 
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import {
     ClipboardDocumentListIcon,
     ClockIcon,
-    CurrencyDollarIcon,
+    CalendarDaysIcon,
     UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/button';
@@ -45,8 +45,8 @@ export default async function Page() {
                                         Select a patient
                                     </option>
                                     {patients.map((patient) => (
-                                        <option key={patient.PatientID} value={patient.name}>
-                                            {patient.name}
+                                        <option key={patient.PatientID} value={patient.Name}>
+                                            {patient.Name}
                                         </option>
                                     ))}
                                 </select>
@@ -70,8 +70,8 @@ export default async function Page() {
                                         Select a physician
                                     </option>
                                     {physicians.map((physician) => (
-                                        <option key={physician.physiicanid} value={physician.name}>
-                                            {physician.name}
+                                        <option key={physician.PhysicianID} value={physician.Name}>
+                                            {physician.Name}
                                         </option>
                                     ))}
                                 </select>
@@ -93,7 +93,7 @@ export default async function Page() {
                                         placeholder="Enter a date as mm-dd-yyyy"
                                         className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                     />
-                                    <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                                    <CalendarDaysIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                                 </div>
                             </div>
                         </div>
