@@ -1,6 +1,7 @@
 'use server';
 const mysql = require("mysql2");
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 require('dotenv').config();
 
 const SEARCH_LIMIT = 1000;
@@ -48,6 +49,26 @@ export async function getPhysicians(name) {
     using (specializationid)
     where name like '%${name}%' 
     order by name, physicianid
+    limit ${SEARCH_LIMIT}`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0]);
+    connection.end();
+    return results[0];
+}
+
+export async function getSpecializations(name) {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select * from specializations
+    where description like '%${name}%' 
+    order by description
     limit ${SEARCH_LIMIT}`;
     let results = await connection.promise().query(sql);
     console.log(results[0]);
@@ -162,4 +183,53 @@ export async function deletePhysician(id) {
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/physicians');
+    redirect('/dashboard/physicians');
+}
+
+export async function createPatient(formData) {
+    console.log(formData);
+    const name = formData.get('name');
+    const contact = formData.get('contact');
+    const dob = formData.get('dob');
+    console.log(name, contact, dob);
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `INSERT INTO patients (name, contactinfo, dob)
+    values ('${name}', '${contact}', '${dob}')`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0])
+    connection.end();
+    revalidatePath('/dashboard/patients');
+    redirect(`/dashboard/patients?query=${name}`);
+}
+
+export async function createPhysician(formData) {
+    console.log(formData);
+    const name = formData.get('name');
+    const specializationid = formData.get('specializiationid');
+    const contact = formData.get('contact');
+    console.log(name, specializationid, contact);
+    // noStore();
+    // let connection = mysql.createConnection(connectionConfig);
+    // connection.connect(function (err) {
+    //     if (err) {
+    //         console.error('error connecting: ' + err.stack);
+    //         return;
+    //     }
+    //     console.log('connected to database!');
+    // });
+    // let sql = `INSERT INTO physicians (name, specializatoinid, contactinfo)
+    // values ('${name}', '${specializationid}', '${contactinfo}')`;
+    // let results = await connection.promise().query(sql);
+    // console.log(results[0])
+    // connection.end();
+    // revalidatePath('/dashboard/patients');
+    // redirect(`/dashboard/patients?query=${name}`);
 }

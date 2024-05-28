@@ -25,7 +25,7 @@ export default async function Table({ query }) {
                             return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td className='px-6 py-3'>{x.PatientID}: {x.Name}</td>
                                 <td className='px-6 py-3'>{x.DOB.toDateString()}</td>
-                                <td className='px-6 py-3'>{x.contactinfo}</td>
+                                <td className='px-6 py-3'>{x.ContactInfo}</td>
                                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                     <div className="flex justify-end gap-3">
                                         <UpdatePatient id={x.PatientID} />
