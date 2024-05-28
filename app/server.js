@@ -76,23 +76,6 @@ export async function getSpecializations(name) {
     return results[0];
 }
 
-// export async function getPhysicians() {
-//     noStore();
-//     let connection = mysql.createConnection(connectionConfig);
-//     connection.connect(function (err) {
-//         if (err) {
-//             console.error('error connecting: ' + err.stack);
-//             return;
-//         }
-//         console.log('connected to database!');
-//     });
-//     let sql = `select physicianid, name from physicians order by name, physicianid`;
-//     let results = await connection.promise().query(sql);
-//     console.log(results[0]);
-//     connection.end();
-//     return results[0];
-// }
-
 export async function getAppts(username) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
@@ -110,6 +93,28 @@ export async function getAppts(username) {
     using (patientid)
     where pa.name like '%${username}%'
     order by pa.name, p.name, date desc, starttime desc, endtime desc
+    limit ${SEARCH_LIMIT}`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0]);
+    connection.end();
+    return results[0];
+}
+
+export async function getVacations(name) {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select * from vacations v
+    join physicians p
+    using (physicianid)
+    where p.name like '%${name}%'
+    order by p.name, startdate desc, enddate desc
     limit ${SEARCH_LIMIT}`;
     let results = await connection.promise().query(sql);
     console.log(results[0]);
@@ -166,6 +171,23 @@ export async function deleteAppointment(id) {
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/appointments');
+}
+
+export async function deleteVacation(id) {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `DELETE FROM vacations WHERE vacationid = ${id}`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0])
+    connection.end();
+    revalidatePath('/dashboard/vacations');
 }
 
 export async function deletePatient(id) {

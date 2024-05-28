@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { ChartBarIcon, TableCellsIcon, CalendarDaysIcon, GlobeAsiaAustraliaIcon, UserIcon, BuildingStorefrontIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, TableCellsIcon, ClipboardDocumentListIcon, CalendarDaysIcon, GlobeAsiaAustraliaIcon, UserIcon, BuildingStorefrontIcon } from '@heroicons/react/24/outline'
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -12,7 +12,7 @@ const links = [
     { name: 'Appointments', href: '/dashboard/appointments', icon: CalendarDaysIcon },
     { name: 'Vacations', href: '/dashboard/vacations', icon: GlobeAsiaAustraliaIcon },
     { name: 'Patients', href: '/dashboard/patients', icon: UserIcon },
-    { name: 'Physicians', href: '/dashboard/physicians', icon: BuildingStorefrontIcon }
+    { name: 'Physicians', href: '/dashboard/physicians', icon: ClipboardDocumentListIcon }
 ];
 
 export default function NavLinks() {
