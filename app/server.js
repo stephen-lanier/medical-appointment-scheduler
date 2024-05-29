@@ -225,12 +225,10 @@ export async function deletePhysician(id) {
 }
 
 export async function createPatient(formData) {
-    console.log(formData);
+    noStore();
     const name = formData.get('name').trim();
     const contact = formData.get('contact').trim();
     const dob = formData.get('dob');
-    console.log(name, contact, dob);
-    noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
         if (err) {
@@ -249,12 +247,10 @@ export async function createPatient(formData) {
 }
 
 export async function createPhysician(formData) {
-    console.log(formData);
+    noStore();
     const name = formData.get('name').trim();
     const specializationid = formData.get('specializationid');
     const contact = formData.get('contact').trim();
-    console.log(name, specializationid, contact);
-    noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
         if (err) {
