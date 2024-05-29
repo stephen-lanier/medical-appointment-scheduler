@@ -375,3 +375,35 @@ export async function updatePhysician(id, formData) {
     revalidatePath('/dashboard/physicians');
     redirect(`/dashboard/physicians?query=${db_name}`);
 }
+
+export async function updateVacation(id, formData) {
+    noStore();
+    const startdate = formData.get('startdate');
+    const enddate = formData.get('enddate');
+    const description = formData.get('description');
+    const status = formData.get('status');
+    console.log(startdate, enddate, description, status);
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `
+        UPDATE vacations SET `
+        + (startdate ? `startdate='${startdate}' ` : '')
+        + (enddate ? `enddate='${enddate}' ` : '')
+        + (description ? `description='${description}' ` : '')
+        + (status ? `vacationstatus='${status}' ` : '')
+        + `WHERE vacationid=${id}`;
+    console.log(sql);
+    let results = await connection.promise().query(sql);
+    console.log(results[0].insertId)
+    let results2 = await connection.promise().query(`select physicianid from vacations where vacationid=${id}`)
+    let db_name = await getPhysicianName(results2[0][0].physicianid)
+    connection.end();
+    revalidatePath('/dashboard/vacations');
+    redirect(`/dashboard/vacations?query=${db_name}`);
+}
