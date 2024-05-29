@@ -3,7 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { ChartBarIcon, TableCellsIcon, ClipboardDocumentListIcon, CalendarDaysIcon, GlobeAsiaAustraliaIcon, UserIcon, BuildingStorefrontIcon } from '@heroicons/react/24/outline'
+import { 
+    ChartBarIcon, 
+    TableCellsIcon, 
+    ClipboardDocumentListIcon, 
+    CalendarDaysIcon, 
+    GlobeAsiaAustraliaIcon, 
+    UserIcon, 
+    BuildingStorefrontIcon 
+} from '@heroicons/react/24/outline'
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
