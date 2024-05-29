@@ -1,6 +1,7 @@
 'use server';
 const mysql = require("mysql2");
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
+import { isAppPageRouteDefinition } from 'next/dist/server/future/route-definitions/app-page-route-definition';
 import { redirect } from 'next/navigation';
 require('dotenv').config();
 
@@ -266,6 +267,30 @@ export async function createPhysician(formData) {
     connection.end();
     revalidatePath('/dashboard/physicians');
     redirect(`/dashboard/physicians?query=${name}`);
+}
+
+export async function createAppointment(id, formData) {
+    noStore();
+    const db_name = await getPatientName(id);
+    const physicianid = formData.get('physicianid');
+    const date = formData.get('date');
+    const starttime = formData.get('starttime');
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `INSERT INTO appointments (patientid, physicianid, date, starttime, endtime)
+    values (${id}, ${physicianid}, '${date}', '${starttime}', ADDTIME('${starttime}', 3000))`;
+    console.log(sql);
+    let results = await connection.promise().query(sql);
+    console.log(results[0].insertId)
+    connection.end();
+    revalidatePath('/dashboard/appointments');
+    redirect(`/dashboard/appointments?query=${db_name}`);
 }
 
 export async function updatePatient(id, formData) {

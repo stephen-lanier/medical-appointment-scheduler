@@ -1,65 +1,62 @@
+'use server';
 import Link from 'next/link';
 import {
-    UserIcon,
+    ClipboardDocumentListIcon,
+    ClockIcon,
     CalendarDaysIcon,
-    EnvelopeIcon
+    UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/button';
-import { createAppointment } from '@/app/server';
-
-export default function Page({ params }) {
-
-    const id = params.id;
-    const createAppointmentWithID = createAppointment.bind(null, id);
-
-    return (
-        <main className="font-mono text-slate-800 p-5 bg-slate-50 uppercase">
-            <div className="flex">
-                <h1>Create Appointment for Patient ID: {id}</h1>
-            </div>
-        </main>
-    );
-}
+import { getPhysicians, createAppointment } from '@/app/server';
 
 export default async function Page({ params }) {
 
     const id = params.id;
-
+    const createAppointmentWithID = createAppointment.bind(null, id);
+    const physicians = await getPhysicians('');
 
     return (
         <main className="font-mono text-slate-800 p-5 bg-slate-50 uppercase">
             <div className="flex">
                 {/* <h1>Create Appointment</h1> */}
-                <form action={updatePatientWithId}>
+                <form action={createAppointmentWithID}>
                     <div className="rounded-md bg-gray-50 p-4 md:p-6">
-                        {/* Name */}
+
+                        {/* Physician Name */}
                         <div className="mb-4">
-                            <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-                                Enter Patient Name
+                            <label htmlFor="physicianid" className="mb-2 block text-sm font-medium">
+                                Choose physician
                             </label>
-                            <div className="relative mt-2 rounded-md">
-                                <div className="relative">
-                                    <input
-                                        id="name"
-                                        name="name"
-                                        type="text"
-                                        placeholder="patient's full name"
-                                        className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                                    />
-                                    <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-                                </div>
+                            <div className="relative">
+                                <select
+                                    id="physicianid"
+                                    name="physicianid"
+                                    className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                                    defaultValue=""
+                                >
+                                    <option value="" disabled>
+                                        Select a physician
+                                    </option>
+                                    {physicians.map((physician) => (
+                                        <option key={physician.PhysicianID} value={physician.PhysicianID}>
+                                            {physician.Name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ClipboardDocumentListIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
                             </div>
                         </div>
-                        {/* DOB */}
+
+                        {/* Date */}
                         <div className="mb-4">
                             <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-                                Enter Date of Birth
+                                Enter a date
                             </label>
                             <div className="relative mt-2 rounded-md">
                                 <div className="relative">
                                     <input
-                                        id="dob"
-                                        name="dob"
+                                        id="date"
+                                        name="date"
                                         type="date"
                                         placeholder="Enter a date as mm-dd-yyyy"
                                         className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -68,28 +65,30 @@ export default async function Page({ params }) {
                                 </div>
                             </div>
                         </div>
-                        {/* Contact Info */}
+
+                        {/* Start Time */}
                         <div className="mb-4">
-                            <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-                                Enter Contact Info
+                            <label htmlFor="start time" className="mb-2 block text-sm font-medium">
+                                Enter a start time
                             </label>
                             <div className="relative mt-2 rounded-md">
                                 <div className="relative">
                                     <input
-                                        id="contact"
-                                        name="contact"
-                                        type="text"
-                                        placeholder="example@email.com"
+                                        id="starttime"
+                                        name="starttime"
+                                        type="time"
+                                        placeholder="Enter a start time"
                                         className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                     />
-                                    <EnvelopeIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                                    <ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div className="mt-6 flex justify-end gap-4">
                         <Link
-                            href="/dashboard/patients"
+                            href="/dashboard/appointments"
                             className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
                         >
                             Cancel
