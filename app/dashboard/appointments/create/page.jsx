@@ -1,6 +1,5 @@
 import Search from '@/app/ui/appointments/create/search';
 import Table from '@/app/ui/appointments/create/table';
-import { Next } from '@/app/ui/appointments/create/buttons';
 
 
 export default async function Page({ searchParams }) {

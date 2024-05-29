@@ -337,9 +337,9 @@ export async function updatePatient(id, formData) {
 
     let sql = `
         UPDATE patients SET ` 
-        + (name ? `name='${name}' ` : '')
-        + (contact ? `contactinfo='${contact}' ` : '')
-        + (dob ? `dob='${dob}' ` : '')
+        + (name ? `name='${name}', ` : '')
+        + (contact ? `contactinfo='${contact}', ` : '')
+        + (dob ? `dob='${dob}', ` : '')
         + `WHERE patientid=${id}`;
     let results = await connection.promise().query(sql);
     connection.end();
@@ -365,8 +365,8 @@ export async function updatePhysician(id, formData) {
 
     let sql = `
         UPDATE physicians SET ` 
-        + (name ? `name='${name}' ` : '')
-        + (contact ? `contactinfo='${contact}' ` : '')
+        + (name ? `name='${name}', ` : '')
+        + (contact ? `contactinfo='${contact}', ` : '')
         + (specializationid ? `specializationid='${specializationid}' ` : '')
         + `WHERE physicianid=${id}`;
     let results = await connection.promise().query(sql);
@@ -375,13 +375,41 @@ export async function updatePhysician(id, formData) {
     redirect(`/dashboard/physicians?query=${db_name}`);
 }
 
+export async function updateAppointment(id, formData) {
+    noStore();
+    const date = formData.get('date');
+    const starttime = formData.get('starttime');
+    const duration = formData.get('duration');
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `
+        UPDATE appointments SET `
+        + (date ? `date='${date}', ` : '')
+        + (starttime ? `starttime='${starttime}', ` : '')
+        + (duration ? `endtime=ADDTIME('${starttime}', ${duration*100}) ` : `endtime=ADDTIME('${starttime}', ${30*100}) `)
+        + `WHERE appointmentid=${id}`;
+    console.log(sql);
+    let results = await connection.promise().query(sql);
+    console.log(results[0].insertId)
+    let results2 = await connection.promise().query(`select patientid from appointments where appointmentid=${id}`)
+    let db_name = await getPatientName(results2[0][0].patientid)
+    connection.end();
+    revalidatePath('/dashboard/appointments');
+    redirect(`/dashboard/appointments?query=${db_name}`);
+}
+
 export async function updateVacation(id, formData) {
     noStore();
     const startdate = formData.get('startdate');
     const enddate = formData.get('enddate');
     const description = formData.get('description');
     const status = formData.get('status');
-    console.log(startdate, enddate, description, status);
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
         if (err) {
@@ -392,9 +420,9 @@ export async function updateVacation(id, formData) {
     });
     let sql = `
         UPDATE vacations SET `
-        + (startdate ? `startdate='${startdate}' ` : '')
-        + (enddate ? `enddate='${enddate}' ` : '')
-        + (description ? `description='${description}' ` : '')
+        + (startdate ? `startdate='${startdate}', ` : '')
+        + (enddate ? `enddate='${enddate}', ` : '')
+        + (description ? `description='${description}', ` : '')
         + (status ? `vacationstatus='${status}' ` : '')
         + `WHERE vacationid=${id}`;
     console.log(sql);
@@ -406,3 +434,4 @@ export async function updateVacation(id, formData) {
     revalidatePath('/dashboard/vacations');
     redirect(`/dashboard/vacations?query=${db_name}`);
 }
+
