@@ -7,7 +7,6 @@ export default async function Table({ query }) {
 
     return (
         <div className="py-10">
-            <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Patients with names like <b>{query}</b></h1>
             <div className="relative overflow-auto shadow-md sm:rounded-lg mx-5 max-h-96">
                 <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">

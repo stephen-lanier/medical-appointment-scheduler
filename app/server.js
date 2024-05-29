@@ -335,12 +335,14 @@ export async function updatePatient(id, formData) {
         console.log('connected to database!');
     });
 
-    let sql = `
-        UPDATE patients SET ` 
-        + (name ? `name='${name}', ` : '')
-        + (contact ? `contactinfo='${contact}', ` : '')
-        + (dob ? `dob='${dob}', ` : '')
-        + `WHERE patientid=${id}`;
+    let updatedFields = [];
+    if (name) { updatedFields.push(`name='${name}'`); }
+    if (contact) { updatedFields.push(`contactinfo='${contact}'`); }
+    if (dob) { updatedFields.push(`dob='${dob}'`); }
+
+    let sql = `UPDATE patients SET `
+        + updatedFields.join(',')
+        + ` WHERE patientid=${id}`;
     let results = await connection.promise().query(sql);
     connection.end();
     revalidatePath('/dashboard/patients');
@@ -350,7 +352,6 @@ export async function updatePatient(id, formData) {
 export async function updatePhysician(id, formData) {
     noStore();
     const name = formData.get('name').trim();
-    const db_name = await getPhysicianName(id);
     const specializationid = formData.get('specializationid');
     const contact = formData.get('contact').trim();
 
@@ -362,14 +363,17 @@ export async function updatePhysician(id, formData) {
         }
         console.log('connected to database!');
     });
+    let updatedFields = []
+    if (name) { updatedFields.push(`name='${name}'`); }
+    if (contact) { updatedFields.push(`contactinfo='${contact}'`); }
+    if (specializationid) { updatedFields.push(`specializationid='${specializationid}'`); }
 
-    let sql = `
-        UPDATE physicians SET ` 
-        + (name ? `name='${name}', ` : '')
-        + (contact ? `contactinfo='${contact}', ` : '')
-        + (specializationid ? `specializationid='${specializationid}' ` : '')
-        + `WHERE physicianid=${id}`;
+    let sql = `UPDATE physicians SET `
+        + updatedFields.join(',')
+        + ` WHERE physicianid=${id}`;
+    console.log(sql);
     let results = await connection.promise().query(sql);
+    const db_name = await getPhysicianName(id);
     connection.end();
     revalidatePath('/dashboard/physicians');
     redirect(`/dashboard/physicians?query=${db_name}`);
@@ -388,12 +392,18 @@ export async function updateAppointment(id, formData) {
         }
         console.log('connected to database!');
     });
-    let sql = `
-        UPDATE appointments SET `
-        + (date ? `date='${date}', ` : '')
-        + (starttime ? `starttime='${starttime}', ` : '')
-        + (duration ? `endtime=ADDTIME('${starttime}', ${duration*100}) ` : `endtime=ADDTIME('${starttime}', ${30*100}) `)
-        + `WHERE appointmentid=${id}`;
+
+    let updatedFields = [];
+    if (date) { updatedFields.push(`date='${date}'`); }
+    if (starttime) { 
+        updatedFields.push(`starttime='${starttime}'`); 
+    }
+    if (duration) { updatedFields.push(`endtime=ADDTIME('${starttime}', ${duration * 100})`); }
+    else if (starttime) { updatedFields.push(`endtime=ADDTIME('${starttime}', ${30 * 100})`); }
+
+    let sql = `UPDATE appointments SET `
+        + updatedFields.join(',')
+        + ` WHERE appointmentid=${id}`;
     console.log(sql);
     let results = await connection.promise().query(sql);
     console.log(results[0].insertId)
@@ -418,13 +428,16 @@ export async function updateVacation(id, formData) {
         }
         console.log('connected to database!');
     });
-    let sql = `
-        UPDATE vacations SET `
-        + (startdate ? `startdate='${startdate}', ` : '')
-        + (enddate ? `enddate='${enddate}', ` : '')
-        + (description ? `description='${description}', ` : '')
-        + (status ? `vacationstatus='${status}' ` : '')
-        + `WHERE vacationid=${id}`;
+
+    let updatedFields = [];
+    if (startdate) {updatedFields.push(`startdate='${startdate}'`);}
+    if (enddate) {updatedFields.push(`enddate='${enddate}'`);}
+    if (description) {updatedFields.push(`description='${description}'`);}
+    if (status) {updatedFields.push(`vacationstatus='${status}'`);}
+
+    let sql = `UPDATE vacations SET `
+        + updatedFields.join(',')
+        + ` WHERE vacationid=${id}`;
     console.log(sql);
     let results = await connection.promise().query(sql);
     console.log(results[0].insertId)
