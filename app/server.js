@@ -151,6 +151,7 @@ export async function getPhysicianName(id) {
         console.log('connected to database!');
     });
     let sql = `select name from physicians where physicianid=${id}`;
+    console.log(sql);
     let results = await connection.promise().query(sql);
     console.log(results[0][0].name)
     connection.end();
@@ -291,6 +292,32 @@ export async function createAppointment(id, formData) {
     connection.end();
     revalidatePath('/dashboard/appointments');
     redirect(`/dashboard/appointments?query=${db_name}`);
+}
+
+export async function createVacation(formData) {
+    noStore();
+    const physicianid = formData.get('physicianid');
+    const db_name = await getPhysicianName(physicianid);
+    const startdate = formData.get('startdate');
+    const enddate = formData.get('enddate');
+    const description = formData.get('description');
+    const status = formData.get('status');
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `INSERT INTO vacations (physicianid, startdate, enddate, reason, vacationstatus)
+    values (${physicianid}, '${startdate}', '${enddate}', '${description}', '${status}')`;
+    console.log(sql);
+    let results = await connection.promise().query(sql);
+    console.log(results[0].insertId)
+    connection.end();
+    revalidatePath('/dashboard/vacations');
+    redirect(`/dashboard/vacations?query=${db_name}`);
 }
 
 export async function updatePatient(id, formData) {

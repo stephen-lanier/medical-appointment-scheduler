@@ -9,26 +9,17 @@ import {
     PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/button';
-import { getPhysicians } from '@/app/server';
+import { getPhysicians, createVacation } from '@/app/server';
 
 export default async function Page() {
 
     const physicians = await getPhysicians('');
 
-    const handleSubmit = async (event) => {
-        'use server';
-        event.preventDefault();
-        setTimeout(() => {
-            alert('A name was submitted!');
-        }, 300)
-        // console.log('A name was submitted: ' + name);
-    }
-
     return (
         <main className="font-mono text-slate-800 p-5 bg-slate-50 uppercase">
             <div className="flex">
                 {/* <h1>Create Vacation</h1> */}
-                <form action={handleSubmit}>
+                <form action={createVacation}>
                     <div className="rounded-md bg-gray-50 p-4 md:p-6">
                         {/* Physicians Name */}
                         <div className="mb-4">
@@ -37,8 +28,8 @@ export default async function Page() {
                             </label>
                             <div className="relative">
                                 <select
-                                    id="patient"
-                                    name="patientId"
+                                    id="physicianid"
+                                    name="physicianid"
                                     className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                     defaultValue=""
                                 >
@@ -46,7 +37,7 @@ export default async function Page() {
                                         Select a physician
                                     </option>
                                     {physicians.map((physician) => (
-                                        <option key={physician.PhysicianID} value={physician.Name}>
+                                        <option key={physician.PhysicianID} value={physician.PhysicianID}>
                                             {physician.Name}
                                         </option>
                                     ))}

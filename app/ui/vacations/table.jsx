@@ -25,7 +25,7 @@ export default async function Table({ query }) {
                     <tbody>
                         {vacationsData.map(x => {
                             return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td className='px-6 py-3'>{x.PhysicianID}: {x.PhysicianName}</td>
+                                <td className='px-6 py-3'>{x.PhysicianID}: {x.Name}</td>
                                 <td className='px-6 py-3'>{x.StartDate.toDateString()}</td>
                                 <td className='px-6 py-3'>{x.EndDate.toDateString()}</td>
                                 <td className='px-6 py-3'>{x.Reason}</td>
