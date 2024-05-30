@@ -14,6 +14,73 @@ var connectionConfig = {
     database: 'appointments'
 };
 
+export async function getPatientCount() {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select count(*) as total from patients`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0]);
+    connection.end();
+    return results[0][0];
+}
+export async function getPhysicianCount() {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select count(*) as total from physicians`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0]);
+    connection.end();
+    return results[0][0];
+}
+
+export async function getSpecializationCount() {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select count(*) as total from specializations`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0]);
+    connection.end();
+    return results[0][0];
+}
+
+export async function getAppointmentCount() {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select count(*) as total from appointments`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0]);
+    connection.end();
+    return results[0][0];
+}
+
 export async function getPatients(name) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
@@ -115,6 +182,28 @@ export async function getApptCounts() {
     where YEAR(date) = YEAR(NOW())
     group by 1 
     order by 1`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0]);
+    connection.end();
+    return results[0];
+}
+
+export async function getAgesAppointments() {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select PatientID, GREATEST(FLOOR(DATEDIFF(NOW(), DOB) / 365), 0) as age, count(*) as total 
+        from appointments 
+        join patients using (PatientID)
+        where date >= DATE_SUB(NOW(), INTERVAL 3 YEAR)
+        group by PatientID, DOB
+        order by 1`;
     let results = await connection.promise().query(sql);
     console.log(results[0]);
     connection.end();

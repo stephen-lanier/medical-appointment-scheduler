@@ -191,7 +191,7 @@ async function getPatientsByAge(age) {
         // console.log('connected to database!');
     });
 
-    let sql = `select PatientID from patients where year(DOB)=${2024 - age}`;
+    let sql = `select PatientID from patients where year(DOB)=${YEAR(NOW()) - age}`;
     let res = await connection.promise().query(sql);
     connection.end();
     return res;
