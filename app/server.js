@@ -100,6 +100,27 @@ export async function getAppts(username) {
     return results[0];
 }
 
+export async function getApptCounts() {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    let sql = `select date, count(*) as total 
+    from appointments 
+    where YEAR(date) = YEAR(NOW())
+    group by 1 
+    order by 1`;
+    let results = await connection.promise().query(sql);
+    console.log(results[0]);
+    connection.end();
+    return results[0];
+}
+
 export async function getVacations(name) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
@@ -447,4 +468,5 @@ export async function updateVacation(id, formData) {
     revalidatePath('/dashboard/vacations');
     redirect(`/dashboard/vacations?query=${db_name}`);
 }
+
 
