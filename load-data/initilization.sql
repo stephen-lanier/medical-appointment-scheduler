@@ -20,25 +20,6 @@ create table Physicians(
     ContactInfo varchar(50) not null
 );
 
-DELIMITER //
-CREATE TRIGGER PhysicianAvailability
-BEFORE INSERT ON Appointments
-FOR EACH ROW
-BEGIN
-    DECLARE conflict_count INT;
-    SELECT COUNT(*) INTO conflict_count
-    FROM Appointments
-    WHERE New.PhysicianID = PhysicianID
-      AND New.Date = Date
-      AND NOT (New.StartTime >= EndTime OR New.EndTime <= StartTime);
-
-    IF conflict1_count > 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Cannot schedule appointment: Time conflict exists for the physician.';
-    END IF;
-END;
-DELIMITER;
-
 create table Appointments (
 	AppointmentID serial primary key,
 	`Date` date not null,
@@ -58,13 +39,41 @@ create table Vacations (
     Reason varchar(50)
 );
 
+DELIMITER //
+CREATE TRIGGER PhysicianAvailability
+BEFORE INSERT ON Appointments
+FOR EACH ROW
+BEGIN
+    DECLARE conflict_count INT;
+    SET conflict_count = (
+        SELECT COUNT(*)
+        FROM Appointments
+        WHERE PhysicianID = New.PhysicianID
+        AND `Date` = New.Date
+        AND (
+            (New.StartTime BETWEEN StartTime AND EndTime)
+            OR (New.EndTime BETWEEN StartTime AND EndTime)
+            OR (StartTime BETWEEN New.StartTime AND New.EndTime)
+        )
+    );
+
+    IF conflict_count > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot schedule appointment: Time conflict exists for the physician.';
+    END IF;
+END //
+DELIMITER ;
 
 -- Nic's Query
 -- Physicians/Speciality
+/*
 SELECT Physicians.Name AS PhysicianName, Specializations.Description AS Specialty
 FROM Physicians
 JOIN Specializations ON Physicians.SpecializationID = Specializations.SpecializationID;
+*/
 -- Appointments by age
+/*
 SELECT Appointments.*, TIMESTAMPDIFF(YEAR, Patients.DOB, Appointments.Date) AS Age
 FROM Appointments
 JOIN Patients ON Appointments.PatientID = Patients.PatientID;
+*/
