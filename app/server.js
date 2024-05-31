@@ -92,10 +92,10 @@ export async function getPatients(name) {
         console.log('connected to database!');
     });
     let sql = `select * from patients 
-    where name like '%${name}%' 
+    where name like ? 
     order by name, patientid
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql);
+    let results = await connection.promise().query(sql, ['%' + name + '%']);
     console.log(results[0]);
     connection.end();
     return results[0];
@@ -114,10 +114,10 @@ export async function getPhysicians(name) {
     let sql = `select * from physicians 
     join specializations
     using (specializationid)
-    where name like '%${name}%' 
+    where name like ? 
     order by name, physicianid
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql);
+    let results = await connection.promise().query(sql, ['%' + name + '%']);
     console.log(results[0]);
     connection.end();
     return results[0];
@@ -134,10 +134,10 @@ export async function getSpecializations(name) {
         console.log('connected to database!');
     });
     let sql = `select * from specializations
-    where description like '%${name}%' 
+    where description like ? 
     order by description
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql);
+    let results = await connection.promise().query(sql, ['%' + name + '%']);
     console.log(results[0]);
     connection.end();
     return results[0];
@@ -158,10 +158,10 @@ export async function getAppts(username) {
     using (physicianid)
     join patients pa
     using (patientid)
-    where pa.name like '%${username}%'
+    where pa.name like ?
     order by pa.name, p.name, date desc, starttime desc, endtime desc
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql);
+    let results = await connection.promise().query(sql, ['%' + username + '%']);
     console.log(results[0]);
     connection.end();
     return results[0];
@@ -223,10 +223,10 @@ export async function getVacations(name) {
     let sql = `select * from vacations v
     join physicians p
     using (physicianid)
-    where p.name like '%${name}%'
+    where p.name like ?
     order by p.name, startdate desc, enddate desc
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql);
+    let results = await connection.promise().query(sql, ['%' + name + '%']);
     console.log(results[0]);
     connection.end();
     return results[0];
@@ -242,8 +242,8 @@ export async function getPatientName(id) {
         }
         console.log('connected to database!');
     });
-    let sql = `select name from patients where patientid=${id}`;
-    let results = await connection.promise().query(sql);
+    let sql = `select name from patients where patientid=?`;
+    let results = await connection.promise().query(sql, [id]);
     console.log(results[0][0].name)
     connection.end();
     return results[0][0].name;
@@ -259,16 +259,16 @@ export async function getPhysicianName(id) {
         }
         console.log('connected to database!');
     });
-    let sql = `select name from physicians where physicianid=${id}`;
+    let sql = `select name from physicians where physicianid=?`;
     console.log(sql);
-    let results = await connection.promise().query(sql);
+    let results = await connection.promise().query(sql, [id]);
     console.log(results[0][0].name)
     connection.end();
     return results[0][0].name;
 }
 
 export async function getPhysiciansAndSpecialties() {
-  noStore();
+    noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
         if (err) {
@@ -283,28 +283,28 @@ export async function getPhysiciansAndSpecialties() {
           JOIN Specializations ON Physicians.SpecializationID = Specializations.SpecializationID;
       `;
 
-      try {
-          const [results, fields] = await connection.promise().query(sql);
-          console.log('Physicians and Specialties: ', results);
-          connection.end();
-          return results;
-      } catch (error) {
-          console.error('Failed to execute query: ', error);
-          connection.end();
-          throw error;
-      }
+    try {
+        const [results, fields] = await connection.promise().query(sql);
+        console.log('Physicians and Specialties: ', results);
+        connection.end();
+        return results;
+    } catch (error) {
+        console.error('Failed to execute query: ', error);
+        connection.end();
+        throw error;
+    }
 }
 
 export async function getAppointmentsByAge() {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
-      connection.connect(function (err) {
-          if (err) {
-              console.error('error connecting: ' + err.stack);
-              return;
-          }
-          console.log('connected to database!');
-      });
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
     const sql = `
         SELECT Appointments.*, TIMESTAMPDIFF(YEAR, Patients.DOB, Appointments.Date) AS Age
         FROM Appointments
@@ -321,7 +321,7 @@ export async function getAppointmentsByAge() {
         throw error;
     }
 }
-  
+
 
 export async function deleteAppointment(id) {
     noStore();
@@ -333,8 +333,8 @@ export async function deleteAppointment(id) {
         }
         console.log('connected to database!');
     });
-    let sql = `DELETE FROM appointments WHERE appointmentid = ${id}`;
-    let results = await connection.promise().query(sql);
+    let sql = `DELETE FROM appointments WHERE appointmentid = ?`;
+    let results = await connection.promise().query(sql, [id]);
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/appointments');
@@ -350,8 +350,8 @@ export async function deleteVacation(id) {
         }
         console.log('connected to database!');
     });
-    let sql = `DELETE FROM vacations WHERE vacationid = ${id}`;
-    let results = await connection.promise().query(sql);
+    let sql = `DELETE FROM vacations WHERE vacationid = ?`;
+    let results = await connection.promise().query(sql, [id]);
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/vacations');
@@ -367,8 +367,8 @@ export async function deletePatient(id) {
         }
         console.log('connected to database!');
     });
-    let sql = `DELETE FROM patients WHERE patientid = ${id}`;
-    let results = await connection.promise().query(sql);
+    let sql = `DELETE FROM patients WHERE patientid = ?`;
+    let results = await connection.promise().query(sql, [id]);
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/patients');
@@ -384,8 +384,8 @@ export async function deletePhysician(id) {
         }
         console.log('connected to database!');
     });
-    let sql = `DELETE FROM physicians WHERE physicianid = ${id}`;
-    let results = await connection.promise().query(sql);
+    let sql = `DELETE FROM physicians WHERE physicianid = ?`;
+    let results = await connection.promise().query(sql, [id]);
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/physicians');
@@ -405,8 +405,8 @@ export async function createPatient(formData) {
         console.log('connected to database!');
     });
     let sql = `INSERT INTO patients (name, contactinfo, dob)
-    values ('${name}', '${contact}', '${dob}')`;
-    let results = await connection.promise().query(sql);
+    values (?, ?, ?)`;
+    let results = await connection.promise().query(sql, [name, contact, dob]);
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/patients');
@@ -427,8 +427,8 @@ export async function createPhysician(formData) {
         console.log('connected to database!');
     });
     let sql = `INSERT INTO physicians (name, specializationid, contactinfo)
-    values ('${name}', '${specializationid}', '${contact}')`;
-    let results = await connection.promise().query(sql);
+    values (?, ?, ?)`;
+    let results = await connection.promise().query(sql, [name, specializationid, contact]);
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/physicians');
@@ -450,15 +450,15 @@ export async function createAppointment(id, formData) {
         console.log('connected to database!');
     });
     let sql = `INSERT INTO appointments (patientid, physicianid, date, starttime, endtime)
-    values (${id}, ${physicianid}, '${date}', '${starttime}', ADDTIME('${starttime}', 3000))`;
+    values (?, ?, ?, ?, ADDTIME(?, 3000))`;
     console.log(sql);
     try {
-        let results = await connection.promise().query(sql);
+        let results = await connection.promise().query(sql, [id, physicianid, date, starttime, starttime]);
         console.log(results[0].insertId)
         connection.end();
         revalidatePath('/dashboard/appointments');
         redirect(`/dashboard/appointments?query=${db_name}`);
-    } catch(error) {
+    } catch (error) {
         connection.end();
         console.log(error);
         throw error;
@@ -482,9 +482,9 @@ export async function createVacation(formData) {
         console.log('connected to database!');
     });
     let sql = `INSERT INTO vacations (physicianid, startdate, enddate, reason, vacationstatus)
-    values (${physicianid}, '${startdate}', '${enddate}', '${description}', '${status}')`;
+    values (?, ?, ?, ?, ?)`;
     console.log(sql);
-    let results = await connection.promise().query(sql);
+    let results = await connection.promise().query(sql, [physicianid, startdate, enddate, description, status]);
     console.log(results[0].insertId)
     connection.end();
     revalidatePath('/dashboard/vacations');
@@ -567,8 +567,8 @@ export async function updateAppointment(id, formData) {
 
     let updatedFields = [];
     if (date) { updatedFields.push(`date='${date}'`); }
-    if (starttime) { 
-        updatedFields.push(`starttime='${starttime}'`); 
+    if (starttime) {
+        updatedFields.push(`starttime='${starttime}'`);
     }
     if (duration) { updatedFields.push(`endtime=ADDTIME('${starttime}', ${duration * 100})`); }
     else if (starttime) { updatedFields.push(`endtime=ADDTIME('${starttime}', ${30 * 100})`); }
@@ -602,10 +602,10 @@ export async function updateVacation(id, formData) {
     });
 
     let updatedFields = [];
-    if (startdate) {updatedFields.push(`startdate='${startdate}'`);}
-    if (enddate) {updatedFields.push(`enddate='${enddate}'`);}
-    if (description) {updatedFields.push(`description='${description}'`);}
-    if (status) {updatedFields.push(`vacationstatus='${status}'`);}
+    if (startdate) { updatedFields.push(`startdate='${startdate}'`); }
+    if (enddate) { updatedFields.push(`enddate='${enddate}'`); }
+    if (description) { updatedFields.push(`description='${description}'`); }
+    if (status) { updatedFields.push(`vacationstatus='${status}'`); }
 
     let sql = `UPDATE vacations SET `
         + updatedFields.join(',')
@@ -620,7 +620,7 @@ export async function updateVacation(id, formData) {
     redirect(`/dashboard/vacations?query=${db_name}`);
 }
 
-async function getAppointmentsByPhysician () {
+async function getAppointmentsByPhysician() {
     let conn = mysql.createConnection(connectionConfig);
     conn.connect(function (err) {
         if (err) {
@@ -629,8 +629,8 @@ async function getAppointmentsByPhysician () {
         }
     });
     let sql = 'select Appointments.PhysicianID, Appointments.AppointmentID, Appointments.Date, Appointments.StartTime,' +
-    'Appointments.EndTime, Appointments.PatientID, Appointments.AppointmentStatus from Appointments left join' +
-    'Physicians on Appointments.PhysicianID = Physicians.PhysicianID order by PhysicianID, StartTime';
+        'Appointments.EndTime, Appointments.PatientID, Appointments.AppointmentStatus from Appointments left join' +
+        'Physicians on Appointments.PhysicianID = Physicians.PhysicianID order by PhysicianID, StartTime';
     let res = await connection.promise().query(sql);
     conn.end();
     return res;
