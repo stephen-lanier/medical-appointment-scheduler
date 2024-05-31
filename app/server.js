@@ -267,7 +267,7 @@ export async function getPhysicianName(id) {
     return results[0][0].name;
 }
 
-export async function getPhysiciansAndSpecialties() {
+export async function getPhysiciansBySpecialty() {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
@@ -278,9 +278,12 @@ export async function getPhysiciansAndSpecialties() {
         console.log('connected to database!');
     });
     const sql = `
-          SELECT Physicians.Name AS PhysicianName, Specializations.Description AS Specialty
-          FROM Physicians
-          JOIN Specializations ON Physicians.SpecializationID = Specializations.SpecializationID;
+            select description, count(*) as total
+            from appointments
+            join physicians using (physicianid)
+            join specializations using (specializationid)
+            group by 1
+            order by 2 desc;
       `;
 
     try {
@@ -636,7 +639,7 @@ async function getAppointmentsByPhysician() {
     return res;
 }
 
-export async function getAppointmentByDayofWeek() {
+export async function getAppointmentsByDayofWeek() {
     let conn = mysql.createConnection(connectionConfig);
     conn.connect(function (err) {
         if (err) {
@@ -644,7 +647,10 @@ export async function getAppointmentByDayofWeek() {
             return;
         }
     });
-    let sql = 'select * from Appointments where DAYOFWEEK(Appointments.Date) = 2';
+    let sql = `select DAYOFWEEK(Date) as DayOfWeek, count(*) as total 
+        from Appointments 
+        group by 1
+        order by 1`;
     let res = await connection.promise().query(sql);
     conn.end();
     return res;
