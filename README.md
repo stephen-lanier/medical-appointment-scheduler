@@ -11,10 +11,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Setting Up
 - Once you've cloned this repository into a local repository, open a terminal at your local repo and run `npm i` to install all dependencies.
-- Use MySQLWorkbench to open and run `/load-data/initialization.sql` to setup the necessary MySQL database on your machine.
+- Use MySQLWorkbench to open and run `/load-data/data-dump.sql` to setup the necessary MySQL database on your machine.
 - Create a file named `.env` in the project root folder and fill in the details specific to your local database 
     - see `.env.example` for the required values
-- Using the terminal running at the root of your local repo, run `node load-data/load-data.js` to populate your database.
 - To see the project's UI
     - `npm run dev` in the terminal 
     - open [http://localhost:3000](http://localhost:3000) with your browser to see the result
