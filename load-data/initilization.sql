@@ -57,6 +57,8 @@ create table Vacations (
     Reason varchar(50)
 );
 
+
+-- Nic's Query
 -- Physicians/Speciality
 SELECT Physicians.Name AS PhysicianName, Specializations.Description AS Specialty
 FROM Physicians

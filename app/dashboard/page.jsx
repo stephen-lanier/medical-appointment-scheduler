@@ -1,60 +1,38 @@
-import Image from "next/image";
-import { getAppts, getPatientName } from "../server";
+import { CalendarReport } from '@/app/ui/dashboard/reports/calendar';
+import { AppointmentByAgeReport } from '@/app/ui/dashboard/reports/age-appointments';
+import Tile from '@/app/ui/dashboard/reports/tile';
+import { 
+    getApptCounts, 
+    getAgesAppointments, 
+    getPatientCount, 
+    getPhysicianCount, 
+    getSpecializationCount, 
+    getAppointmentCount 
+} from '@/app/server';
 
-export default async function Dashboard() {
+export default async function Page() {
 
-    let patientID = 1;
-    let apptsData = await getAppts(patientID);
-    let patientName = await getPatientName(patientID);
+    
+    const appointments = await getApptCounts();
+    const appointmentsVsAge = await getAgesAppointments();
+    const patientsCount = await getPatientCount();
+    const physicianCount = await getPhysicianCount();
+    const specializationCount = await getSpecializationCount();
+    const appointmentCount = await getAppointmentCount();
 
     return (
-        <main className="font-mono text-slate-800 p-5 bg-slate-50">
-            <div className="flex justify-end items-end">
-                <a
-                    className=""
-                    href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    built with{" "}<br />
-                    <Image
-                        src="../../next.svg"
-                        alt="nextjs Logo"
-                        className="dark:invert"
-                        width={100}
-                        height={24}
-                        priority
-                    />
-                </a>
+        <main className="text-slate-800 p-5 font-mono uppercase">
+            <div className='flex flex-row justify-between'>
+                <Tile title={'Patients'} data={patientsCount.total} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/5 h-48 justify-center'}/>
+                <Tile title={'Physicians'} data={physicianCount.total} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/5 h-48 justify-center'}/>
+                <Tile title={'Specialties'} data={specializationCount.total} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/5 h-48 justify-center'}/>
+                <Tile title={'Appointments'} data={appointmentCount.total} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/5 h-48 justify-center'}/>
             </div>
-
-
-            <div className="py-10">
-                <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Appointments for <b>{patientName}</b></h1>
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-5">
-                    <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">
-                            <tr>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Physician</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Date</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Start Time</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>End Time</th>
-                                <th scope='col' className='px-6 py-3 tracking-widest'>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {apptsData.map(x => {
-                                return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td className='px-6 py-3'>{x.PhysicianID}: {x.Name}</td>
-                                    <td className='px-6 py-3'>{x.Date.toDateString()}</td>
-                                    <td className='px-6 py-3'>{x.StartTime}</td>
-                                    <td className='px-6 py-3'>{x.EndTime}</td>
-                                    <td className='px-6 py-3'>{x.AppointmentStatus}</td>
-                                </tr>);
-                            })}
-                        </tbody>
-                    </table>
-                </div>
+            <div className="flex justify-center bg-slate-50 m-5 p-5 rounded-2xl">
+                <CalendarReport data={appointments} />
+            </div>
+            <div className='flex justify-center bg-slate-50 m-5 p-5 rounded-2xl'>
+                <AppointmentByAgeReport data={appointmentsVsAge} />
             </div>
         </main>
     );

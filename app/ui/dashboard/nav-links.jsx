@@ -3,19 +3,24 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { TableCellsIcon, CalendarDaysIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { 
+    ChartBarIcon, 
+    TableCellsIcon, 
+    ClipboardDocumentListIcon, 
+    CalendarDaysIcon, 
+    GlobeAsiaAustraliaIcon, 
+    UserIcon, 
+    BuildingStorefrontIcon 
+} from '@heroicons/react/24/outline'
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-    { name: 'Dashboard', href: '/dashboard', icon: TableCellsIcon },
-    { name: 'Create', href: '/dashboard/create', icon: CalendarDaysIcon },
-    { name: 'Cancel', href: '/dashboard/cancel', icon: XCircleIcon }
-    // {
-    //     name: 'Invoices',
-    //     href: '/dashboard/invoices',
-    // },
-    // { name: 'Customers', href: '/dashboard/customers' },
+    { name: 'Dashboard', href: '/dashboard', icon: ChartBarIcon },
+    { name: 'Appointments', href: '/dashboard/appointments', icon: CalendarDaysIcon },
+    { name: 'Vacations', href: '/dashboard/vacations', icon: GlobeAsiaAustraliaIcon },
+    { name: 'Patients', href: '/dashboard/patients', icon: UserIcon },
+    { name: 'Physicians', href: '/dashboard/physicians', icon: ClipboardDocumentListIcon }
 ];
 
 export default function NavLinks() {
