@@ -18,12 +18,40 @@ let results = [];
 let ageDist = {};
 let specialityDist = {};
 let sexDist = {};
+let dayDist = {};
 let ages = [];
 let sexes = [];
 let specialties = [];
+let dows = [];
+let datesByDow = {
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: []
+};
 let chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
 let days = Array.from({ length: 30 }, (x, i) => i + 1);
 let months = Array.from({ length: 12 }, (x, i) => i + 1);
+
+// load datesByDow so 0 contains list of every sunday of the year, 1 a list of every monday, etc.
+for (var m = 1; m <= 12; m++) {
+    let max;
+    if (m === 2) {max = 28;}
+    else if ([1, 3, 5, 7, 8, 10, 12].includes(m)) {max = 31;}
+    else {max = 30;}
+
+    let month = `${m}`;
+    month = month.length < 2 ? '0' + month : month;
+    for (var d = 1; d <= max; d++) {
+        let day = `${d}`;
+        day = day.length < 2 ? '0' + day : day;
+        let dow = (new Date(`${month}-${day}-2024`)).getDay();
+        datesByDow[dow].push(`2024-${month}-${day}`);
+    }
+}
 
 
 fs.createReadStream(specialtiesFp)              // first load specialties data file
@@ -70,6 +98,13 @@ function getDists() {
         ageDist[x.edad] = ageDist[x.edad] ? ageDist[x.edad] + 1 : 1;
         sexDist[x.sexo] = sexDist[x.sexo] ? sexDist[x.sexo] + 1 : 1;
         specialityDist[x.especialidad] = specialityDist[x.especialidad] ? specialityDist[x.especialidad] + 1 : 1;
+        let m = x.reserva_mes_d;
+        m = m.length < 2 ? '0'+m : m;
+        let d = x.reserva_dia_d;
+        d = d.length < 2 ? '0'+d : d;
+        let dow = new Date(`${m}-${d}-2024`);
+        dow = dow.getDay();
+        dayDist[dow] = dayDist[dow] ? dayDist[dow] + 1 : 1;
     })
     for (var age in ageDist) {
         ageDist[age] /= results.length;
@@ -82,6 +117,10 @@ function getDists() {
     for (var sex in sexDist) {
         sexDist[sex] /= results.length;
         sexes = sexes.concat(Array(Math.ceil(sexDist[sex] * 1000)).fill(sex));
+    }
+    for (var dow in dayDist) {
+        dayDist[dow] /= results.length;
+        dows = dows.concat(Array(Math.ceil(dayDist[dow] * 1000)).fill(dow));
     }
     console.log('distributions loaded.');
 }
@@ -161,6 +200,7 @@ async function generateAppointmentsTable() {
         // console.log('connected to database!');
     });
 
+    let schedulingConflicts = 0;
     for (var i in results) {
         bar.tick();
         let patients = await getPatientsByAge(results[i].edad);
@@ -171,12 +211,24 @@ async function generateAppointmentsTable() {
         m = m.length < 2 ? '0' + m : m;
         let d = results[i].reserva_dia_d;
         d = d.length < 2 ? '0' + d : d;
-        let pair = `('Pending', ${getRandom(physicians)}, ${getRandom(patients)}, '2024-${m}-${d}', CURRENT_TIME(), ADDTIME(CURRENT_TIME(), 3000))`;
+        let dow = (new Date(`${m}-${d}-2024`)).getDay();
+        let datestring = datesByDow[dow][Math.floor(Math.random() * datesByDow[dow].length)]
+        let h = results[i].reserva_hora_d;
+        h = h.length < 2 ? '0' + h : h;
+        h += ':00:00';
+        let pair = `('Pending', ${getRandom(physicians)}, ${getRandom(patients)}, '${datestring}', '${h}', ADDTIME('${h}', 3000))`;
         let sql = `insert into Appointments (AppointmentStatus, PhysicianID, PatientID, Date, StartTime, EndTime) values ` + pair;
-        let res = await connection.promise().query(sql);
+        try {
+            let res = await connection.promise().query(sql);
+        } catch (error) {
+            // console.error(error);
+            schedulingConflicts++;
+            continue;
+        }
     }
 
     connection.end();
+    console.log(`${schedulingConflicts} insertions failed due to scheduling conflicts`);
     console.log(`inserted ${results.length} row(s) into Appointments`);
 
 }
