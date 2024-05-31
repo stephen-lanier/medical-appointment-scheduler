@@ -191,7 +191,7 @@ async function getPatientsByAge(age) {
         // console.log('connected to database!');
     });
 
-    let sql = `select PatientID from patients where year(DOB)=${YEAR(NOW()) - age}`;
+    let sql = `select PatientID from patients where year(DOB)=${2024 - age}`;
     let res = await connection.promise().query(sql);
     connection.end();
     return res;
@@ -235,4 +235,34 @@ function getRandomDate() {
     let day = `${getRandom(days)}`;
     day = (month === '02' && ['29', '30'].includes(day)) ? '28' : day;
     return (month + '-' + day);
+}
+
+export async function getAppointmentsByPhysician () {
+    let conn = mysql.createConnection(connectionConfig);
+    conn.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+    });
+    let sql = 'select Appointments.PhysicianID, Appointments.AppointmentID, Appointments.Date, Appointments.StartTime,' +
+    'Appointments.EndTime, Appointments.PatientID, Appointments.AppointmentStatus from Appointments left join' +
+    'Physicians on Appointments.PhysicianID = Physicians.PhysicianID order by PhysicianID, StartTime';
+    let res = await connection.promise().query(sql);
+    conn.end();
+    return res;
+}
+
+async function getAppointmentByDayofWeek() {
+    let conn = mysql.createConnection(connectionConfig);
+    conn.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+    });
+    let sql = 'select * from Appointments where DAYOFWEEK(Appointments.Date) = 2';
+    let res = await connection.promise().query(sql);
+    conn.end();
+    return res;
 }

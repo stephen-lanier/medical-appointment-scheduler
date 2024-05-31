@@ -613,3 +613,33 @@ export async function updateVacation(id, formData) {
     revalidatePath('/dashboard/vacations');
     redirect(`/dashboard/vacations?query=${db_name}`);
 }
+
+async function getAppointmentsByPhysician () {
+    let conn = mysql.createConnection(connectionConfig);
+    conn.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+    });
+    let sql = 'select Appointments.PhysicianID, Appointments.AppointmentID, Appointments.Date, Appointments.StartTime,' +
+    'Appointments.EndTime, Appointments.PatientID, Appointments.AppointmentStatus from Appointments left join' +
+    'Physicians on Appointments.PhysicianID = Physicians.PhysicianID order by PhysicianID, StartTime';
+    let res = await connection.promise().query(sql);
+    conn.end();
+    return res;
+}
+
+export async function getAppointmentByDayofWeek() {
+    let conn = mysql.createConnection(connectionConfig);
+    conn.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+    });
+    let sql = 'select * from Appointments where DAYOFWEEK(Appointments.Date) = 2';
+    let res = await connection.promise().query(sql);
+    conn.end();
+    return res;
+}
