@@ -101,7 +101,7 @@ BEGIN
     );
     IF conflict_count > 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Cannot schedule appointment: Scheduling conflicts exist.';
+        SET MESSAGE_TEXT = 'Cannot schedule vacation: Scheduling conflicts exist.';
     END IF;
 END //
 DELIMITER ;
