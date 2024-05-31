@@ -487,11 +487,17 @@ export async function createVacation(formData) {
     let sql = `INSERT INTO vacations (physicianid, startdate, enddate, reason, vacationstatus)
     values (?, ?, ?, ?, ?)`;
     console.log(sql);
-    let results = await connection.promise().query(sql, [physicianid, startdate, enddate, description, status]);
-    console.log(results[0].insertId)
-    connection.end();
-    revalidatePath('/dashboard/vacations');
-    redirect(`/dashboard/vacations?query=${db_name}`);
+    try {
+        let results = await connection.promise().query(sql, [physicianid, startdate, enddate, description, status]);
+        console.log(results[0].insertId)
+        connection.end();
+        revalidatePath('/dashboard/vacations');
+        redirect(`/dashboard/vacations?query=${db_name}`);
+    } catch (error) {
+        connection.end();
+        console.log(error);
+        throw error;
+    }
 }
 
 export async function updatePatient(id, formData) {

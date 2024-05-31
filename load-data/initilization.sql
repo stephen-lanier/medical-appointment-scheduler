@@ -39,9 +39,9 @@ create table Vacations (
     Reason varchar(50)
 );
 
-DROP TRIGGER IF EXISTS PhysicianAvailability;
+DROP TRIGGER IF EXISTS before_insert_appointments;
 DELIMITER //
-CREATE TRIGGER PhysicianAvailability
+CREATE TRIGGER before_insert_appointments
 BEFORE INSERT ON Appointments
 FOR EACH ROW
 BEGIN
@@ -69,6 +69,39 @@ BEGIN
     IF conflict_count > 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Cannot schedule appointment: Time conflict exists for the physician.';
+    END IF;
+END //
+DELIMITER ;
+
+
+DROP TRIGGER IF EXISTS before_insert_vacations;
+DELIMITER //
+CREATE TRIGGER before_insert_vacations
+BEFORE INSERT ON vacations
+FOR EACH ROW
+BEGIN
+    DECLARE conflict_count INT;
+    SET conflict_count = (
+        SELECT COUNT(*)
+        FROM (
+			select physicianid, `date` as startdate, `date` as enddate
+            from appointments
+            union (
+				select physicianid, startdate, enddate
+                from vacations
+            )
+        ) as a
+        WHERE PhysicianID = New.PhysicianID
+        AND (
+			(New.StartDate BETWEEN StartDate AND EndDate)
+            OR (New.EndDate BETWEEN StartDate AND EndDate)
+            OR (StartDate BETWEEN New.StartDate AND New.EndDate)
+            OR (EndDate BETWEEN New.StartDate AND New.EndDate)
+        )
+    );
+    IF conflict_count > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot schedule appointment: Scheduling conflicts exist.';
     END IF;
 END //
 DELIMITER ;
