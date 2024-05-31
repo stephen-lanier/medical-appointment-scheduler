@@ -267,6 +267,62 @@ export async function getPhysicianName(id) {
     return results[0][0].name;
 }
 
+export async function getPhysiciansAndSpecialties() {
+  noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected to database!');
+    });
+    const sql = `
+          SELECT Physicians.Name AS PhysicianName, Specializations.Description AS Specialty
+          FROM Physicians
+          JOIN Specializations ON Physicians.SpecializationID = Specializations.SpecializationID;
+      `;
+
+      try {
+          const [results, fields] = await connection.promise().query(sql);
+          console.log('Physicians and Specialties: ', results);
+          connection.end();
+          return results;
+      } catch (error) {
+          console.error('Failed to execute query: ', error);
+          connection.end();
+          throw error;
+      }
+}
+
+export async function getAppointmentsByAge() {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+      connection.connect(function (err) {
+          if (err) {
+              console.error('error connecting: ' + err.stack);
+              return;
+          }
+          console.log('connected to database!');
+      });
+    const sql = `
+        SELECT Appointments.*, TIMESTAMPDIFF(YEAR, Patients.DOB, Appointments.Date) AS Age
+        FROM Appointments
+        JOIN Patients ON Appointments.PatientID = Patients.PatientID;
+    `;
+    try {
+        const [results, fields] = await connection.promise().query(sql);
+        console.log('Appointments and Ages: ', results);
+        connection.end();
+        return results;
+    } catch (error) {
+        console.error('Failed to execute query: ', error);
+        connection.end();
+        throw error;
+    }
+}
+  
+
 export async function deleteAppointment(id) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
@@ -587,6 +643,3 @@ export async function getAppointmentByDayofWeek() {
     conn.end();
     return res;
 }
-
-
-
