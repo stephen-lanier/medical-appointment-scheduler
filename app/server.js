@@ -452,11 +452,17 @@ export async function createAppointment(id, formData) {
     let sql = `INSERT INTO appointments (patientid, physicianid, date, starttime, endtime)
     values (${id}, ${physicianid}, '${date}', '${starttime}', ADDTIME('${starttime}', 3000))`;
     console.log(sql);
-    let results = await connection.promise().query(sql);
-    console.log(results[0].insertId)
-    connection.end();
-    revalidatePath('/dashboard/appointments');
-    redirect(`/dashboard/appointments?query=${db_name}`);
+    try {
+        let results = await connection.promise().query(sql);
+        console.log(results[0].insertId)
+        connection.end();
+        revalidatePath('/dashboard/appointments');
+        redirect(`/dashboard/appointments?query=${db_name}`);
+    } catch(error) {
+        connection.end();
+        console.log(error);
+        throw error;
+    }
 }
 
 export async function createVacation(formData) {
