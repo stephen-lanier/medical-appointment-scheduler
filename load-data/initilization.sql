@@ -1,3 +1,4 @@
+create database appointments;
 use appointments;
 
 create table Patients (
