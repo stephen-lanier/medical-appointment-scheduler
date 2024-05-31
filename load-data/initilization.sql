@@ -48,16 +48,22 @@ BEGIN
     DECLARE conflict_count INT;
     SET conflict_count = (
         SELECT COUNT(*)
-        FROM Appointments
+        FROM (
+			select physicianid, `date` as startdate, `date` as enddate, starttime, endtime
+            from appointments
+            union (
+				select physicianid, startdate, enddate, '00:00:00' as starttime, '23:59:59' as enddtime
+                from vacations
+            )
+        ) as a
         WHERE PhysicianID = New.PhysicianID
-        AND `Date` = New.Date
         AND (
-			(New.StartTime >= StartTime AND New.StartTime < EndTime)
-            OR (New.EndTime > StartTime AND New.EndTime <= EndTime)
-            OR (StartTime >= New.StartTime AND StartTime < New.EndTime)
---             (New.StartTime BETWEEN StartTime AND EndTime)
---             OR (New.EndTime BETWEEN StartTime AND EndTime)
---             OR (StartTime BETWEEN New.StartTime AND New.EndTime)
+			(New.Date BETWEEN StartDate AND EndDate)
+			AND (
+				(New.StartTime >= StartTime AND New.StartTime < EndTime)
+				OR (New.EndTime > StartTime AND New.EndTime <= EndTime)
+				OR (StartTime >= New.StartTime AND StartTime < New.EndTime)
+			)
         )
     );
     IF conflict_count > 0 THEN
