@@ -66,17 +66,3 @@ BEGIN
     END IF;
 END //
 DELIMITER ;
-
--- Nic's Query
--- Physicians/Speciality
-/*
-SELECT Physicians.Name AS PhysicianName, Specializations.Description AS Specialty
-FROM Physicians
-JOIN Specializations ON Physicians.SpecializationID = Specializations.SpecializationID;
-*/
--- Appointments by age
-/*
-SELECT Appointments.*, TIMESTAMPDIFF(YEAR, Patients.DOB, Appointments.Date) AS Age
-FROM Appointments
-JOIN Patients ON Appointments.PatientID = Patients.PatientID;
-*/
