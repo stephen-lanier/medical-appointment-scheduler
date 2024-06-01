@@ -34,9 +34,9 @@ export default async function Page() {
             <div className="flex flex-row justify-center bg-slate-50 m-5 p-5 rounded-2xl">
                 <CalendarReport data={appointments} />
             </div>
-            <div className="flex flex-row justify-between">
-                <AppointmentsByDayOfWeek data={appointmentsVsDOW} className={'bg-slate-50 m-5 p-5 rounded-2xl w-4/5 h-4/5 justify-center'} />
-                <AppointmentByAgeReport data={appointmentsVsAge} className={'bg-slate-50 m-5 p-5 rounded-2xl w-4/5 h-4/5 justify-center'}/>
+            <div className="flex flex-row justify-between h-fit">
+                <AppointmentsByDayOfWeek data={appointmentsVsDOW} className={'bg-slate-50 m-5 p-5 rounded-2xl w-2/3 justify-center'} />
+                <AppointmentByAgeReport data={appointmentsVsAge} className={'bg-slate-50 m-5 p-5 rounded-2xl w-2/3 justify-center'}/>
             </div>
         </main>
     );

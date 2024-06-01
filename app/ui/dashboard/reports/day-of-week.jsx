@@ -32,11 +32,11 @@ export function AppointmentsByDayOfWeek({ data, className }) {
     data = types.concat(data);
 
     return (
-        <div className={clsx("flex flex-col", className)}>
+        <div className={clsx("flex flex-col justify-center items-center", className)}>
             <Chart
                 chartType="ColumnChart"
-                width="500px"
-                height="500px"
+                width="450px"
+                height="450px"
                 data={data}
                 options={options}
             />
