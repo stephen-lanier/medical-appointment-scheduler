@@ -6,7 +6,13 @@ import clsx from "clsx";
 
 const options = {
     title: 'Appointments by Age\nLast 3 Years',
-    hAxis: { title: "Age" },
+    hAxis: { 
+        title: "Age",
+        viewWindow: {
+            min: -1,
+            max: 110
+        }
+    },
     vAxis: { title: "Appointments" },
     legend: { position: "none" },
     backgroundColor: 'transparent',
