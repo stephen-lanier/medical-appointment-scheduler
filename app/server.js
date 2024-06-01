@@ -309,9 +309,11 @@ export async function getAppointmentsByAge() {
         console.log('connected to database!');
     });
     const sql = `
-        SELECT Appointments.*, TIMESTAMPDIFF(YEAR, Patients.DOB, Appointments.Date) AS Age
-        FROM Appointments
-        JOIN Patients ON Appointments.PatientID = Patients.PatientID;
+        select TIMESTAMPDIFF(YEAR, Patients.DOB, Appointments.Date) as age, count(*) as total
+        from Appointments
+        join Patients using (PatientID)
+        group by 1 
+        order by 1;
     `;
     try {
         const [results, fields] = await connection.promise().query(sql);
