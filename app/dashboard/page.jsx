@@ -2,6 +2,7 @@ import { CalendarReport } from '@/app/ui/dashboard/reports/calendar';
 import { AppointmentByAgeReport } from '@/app/ui/dashboard/reports/age-appointments';
 import Tile from '@/app/ui/dashboard/reports/tile';
 import { AppointmentsByDayOfWeek } from '@/app/ui/dashboard/reports/day-of-week';
+import { SpecializationCounts } from '@/app/ui/dashboard/reports/specialties';
 import { 
     getApptCounts, 
     getAgesAppointments, 
@@ -9,7 +10,8 @@ import {
     getPhysicianCount, 
     getSpecializationCount, 
     getAppointmentCount,
-    getAppointmentsByDayofWeek
+    getAppointmentsByDayofWeek,
+    getSpecialtyCounts
 } from '@/app/server';
 
 export default async function Page() {
@@ -22,6 +24,7 @@ export default async function Page() {
     const physicianCount = await getPhysicianCount();
     const specializationCount = await getSpecializationCount();
     const appointmentCount = await getAppointmentCount();
+    const specialtyCounts = await getSpecialtyCounts();
 
     return (
         <main className="text-slate-800 p-5 font-mono uppercase">
@@ -33,6 +36,9 @@ export default async function Page() {
             </div>
             <div className="flex flex-row justify-center bg-slate-50 m-5 p-5 rounded-2xl">
                 <CalendarReport data={appointments} />
+            </div>
+            <div className="flex flex-row justify-center bg-slate-50 m-5 p-5 rounded-2xl">
+                <SpecializationCounts data={specialtyCounts} />
             </div>
             <div className="flex flex-row justify-between h-fit">
                 <AppointmentsByDayOfWeek data={appointmentsVsDOW} className={'bg-slate-50 m-5 p-5 rounded-2xl w-2/3 justify-center'} />

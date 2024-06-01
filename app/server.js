@@ -267,7 +267,7 @@ export async function getPhysicianName(id) {
     return results[0][0].name;
 }
 
-export async function getPhysiciansBySpecialty() {
+export async function getSpecialtyCounts() {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
