@@ -631,9 +631,10 @@ export async function updateVacation(id, formData) {
     redirect(`/dashboard/vacations?query=${db_name}`);
 }
 
-async function getAppointmentsByPhysician() {
-    let conn = mysql.createConnection(connectionConfig);
-    conn.connect(function (err) {
+export async function getAppointmentsByPhysician() {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
         if (err) {
             console.error('error connecting: ' + err.stack);
             return;
@@ -642,24 +643,26 @@ async function getAppointmentsByPhysician() {
     let sql = 'select Appointments.PhysicianID, Appointments.AppointmentID, Appointments.Date, Appointments.StartTime,' +
         'Appointments.EndTime, Appointments.PatientID, Appointments.AppointmentStatus from Appointments left join' +
         'Physicians on Appointments.PhysicianID = Physicians.PhysicianID order by PhysicianID, StartTime';
-    let res = await connection.promise().query(sql);
-    conn.end();
-    return res;
+    let results = await connection.promise().query(sql);
+    connection.end();
+    return results[0];
 }
 
 export async function getAppointmentsByDayofWeek() {
-    let conn = mysql.createConnection(connectionConfig);
-    conn.connect(function (err) {
+    noStore();
+    let connection = mysql.createConnection(connectionConfig);
+    connection.connect(function (err) {
         if (err) {
             console.error('error connecting: ' + err.stack);
             return;
         }
     });
-    let sql = `select DAYOFWEEK(Date) as DayOfWeek, count(*) as total 
+    let sql = `
+        select DAYOFWEEK(Date) as dayofweek, count(*) as total 
         from Appointments 
         group by 1
         order by 1`;
-    let res = await connection.promise().query(sql);
-    conn.end();
-    return res;
+    let results = await connection.promise().query(sql);
+    connection.end();
+    return results[0];
 }

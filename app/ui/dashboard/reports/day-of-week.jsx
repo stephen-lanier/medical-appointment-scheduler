@@ -4,26 +4,37 @@ import React from "react";
 import { Chart } from "react-google-charts";
 import clsx from "clsx";
 
+const dow_map = {
+    1: 'Sunday',
+    2: 'Monday',
+    3: 'Tuesday',
+    4: 'Wednesday',
+    5: 'Thursday',
+    6: 'Friday',
+    7: 'Saturday',
+};
+
 const options = {
-    title: 'Appointments by Age\nLast 3 Years',
-    hAxis: { title: "Age" },
+    title: 'Appointments by Day of Week',
+    hAxis: { title: "Day of Week" },
     vAxis: { title: "Appointments" },
     legend: { position: "none" },
     backgroundColor: 'transparent',
-    chartArea: { backgroundColor: 'transparent' },
-    dataOpacity: 0.25,
+    chartArea: {backgroundColor: 'transparent'},
+    // bars: 'vertical',
+    dataOpacity: 0.8,
 };
 
-export function AppointmentByAgeReport({ data, className }) {
+export function AppointmentsByDayOfWeek({ data, className }) {
 
-    let types = [['Age', 'Appointments']];
-    data = data.map(x => [x.age, x.total]);
+    let types = [['Day', 'Appointments']];
+    data = data.map(x => [dow_map[x.dayofweek], x.total]);
     data = types.concat(data);
 
     return (
         <div className={clsx("flex flex-col", className)}>
             <Chart
-                chartType="ScatterChart"
+                chartType="ColumnChart"
                 width="500px"
                 height="500px"
                 data={data}

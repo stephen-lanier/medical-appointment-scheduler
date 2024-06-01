@@ -1,13 +1,15 @@
 import { CalendarReport } from '@/app/ui/dashboard/reports/calendar';
 import { AppointmentByAgeReport } from '@/app/ui/dashboard/reports/age-appointments';
 import Tile from '@/app/ui/dashboard/reports/tile';
+import { AppointmentsByDayOfWeek } from '@/app/ui/dashboard/reports/day-of-week';
 import { 
     getApptCounts, 
     getAgesAppointments, 
     getPatientCount, 
     getPhysicianCount, 
     getSpecializationCount, 
-    getAppointmentCount 
+    getAppointmentCount,
+    getAppointmentsByDayofWeek
 } from '@/app/server';
 
 export default async function Page() {
@@ -15,6 +17,7 @@ export default async function Page() {
     
     const appointments = await getApptCounts();
     const appointmentsVsAge = await getAgesAppointments();
+    const appointmentsVsDOW = await getAppointmentsByDayofWeek();
     const patientsCount = await getPatientCount();
     const physicianCount = await getPhysicianCount();
     const specializationCount = await getSpecializationCount();
@@ -28,11 +31,12 @@ export default async function Page() {
                 <Tile title={'Specialties'} data={specializationCount.total} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/5 h-48 justify-center'}/>
                 <Tile title={'Appointments'} data={appointmentCount.total} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/5 h-48 justify-center'}/>
             </div>
-            <div className="flex justify-center bg-slate-50 m-5 p-5 rounded-2xl">
+            <div className="flex flex-row justify-center bg-slate-50 m-5 p-5 rounded-2xl">
                 <CalendarReport data={appointments} />
             </div>
-            <div className='flex justify-center bg-slate-50 m-5 p-5 rounded-2xl'>
-                <AppointmentByAgeReport data={appointmentsVsAge} />
+            <div className="flex flex-row justify-between">
+                <AppointmentsByDayOfWeek data={appointmentsVsDOW} className={'bg-slate-50 m-5 p-5 rounded-2xl w-4/5 h-4/5 justify-center'} />
+                <AppointmentByAgeReport data={appointmentsVsAge} className={'bg-slate-50 m-5 p-5 rounded-2xl w-4/5 h-4/5 justify-center'}/>
             </div>
         </main>
     );
