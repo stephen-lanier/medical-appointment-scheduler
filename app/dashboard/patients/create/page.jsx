@@ -10,7 +10,7 @@ import { createPatient } from '@/app/server';
 export default async function Page() {
 
     return (
-        <main className="font-mono text-slate-800 p-5 bg-slate-50 uppercase">
+        <main className="font-mono text-slate-800 p-5 bg-slate-50 rounded-2xl uppercase">
             <div className="flex">
                 {/* <h1>Create Appointment</h1> */}
                 <form action={createPatient}>

@@ -12,7 +12,7 @@ export default async function Page() {
     const specializations = await getSpecializations('');
 
     return (
-        <main className="font-mono text-slate-800 p-5 bg-slate-50 uppercase">
+        <main className="font-mono text-slate-800 p-5 bg-slate-50 rounded-2xl uppercase">
             <div className="flex">
                 {/* <h1>Create Physician</h1> */}
                 <form action={createPhysician}>
