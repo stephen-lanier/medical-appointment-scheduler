@@ -27,7 +27,7 @@ export default async function Page() {
     const specialtyCounts = await getSpecialtyCounts();
 
     return (
-        <main className="text-slate-800 p-5 font-mono uppercase">
+        <main className="text-slate-800 p-5 font-mono uppercase w-full">
             <div className='flex flex-row justify-between'>
                 <Tile title={'Patients'} data={patientsCount.total} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/5 h-48 justify-center'}/>
                 <Tile title={'Physicians'} data={physicianCount.total} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/5 h-48 justify-center'}/>
@@ -40,9 +40,9 @@ export default async function Page() {
             <div className="flex flex-row justify-center bg-slate-50 m-5 p-5 rounded-2xl">
                 <SpecializationCounts data={specialtyCounts} />
             </div>
-            <div className="flex flex-row justify-between h-fit">
-                <AppointmentsByDayOfWeek data={appointmentsVsDOW} className={'bg-slate-50 m-5 p-5 rounded-2xl w-2/3 justify-center'} />
-                <AppointmentByAgeReport data={appointmentsVsAge} className={'bg-slate-50 m-5 p-5 rounded-2xl w-2/3 justify-center'}/>
+            <div className="flex flex-row justify-between h-fit w-full">
+                <AppointmentsByDayOfWeek data={appointmentsVsDOW} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/2 justify-center'} />
+                <AppointmentByAgeReport data={appointmentsVsAge} className={'bg-slate-50 m-5 p-5 rounded-2xl w-1/2 justify-center'}/>
             </div>
         </main>
     );

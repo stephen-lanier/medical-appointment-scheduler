@@ -21,7 +21,7 @@ export function SpecializationCounts({ data, className }) {
     data = types.concat(data);
 
     return (
-        <div className={clsx("flex flex-col justify-center items-center", className)}>
+        <div className={clsx("flex flex-col justify-center items-center w-full", className)}>
             <Chart
                 chartType="ColumnChart"
                 width="1000px"

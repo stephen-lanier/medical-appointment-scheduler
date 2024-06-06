@@ -2,12 +2,13 @@
 
 import React from "react";
 import { Chart } from "react-google-charts";
+import clsx from "clsx";
 
 const options = {
     title: "Appointments by Day",
 };
 
-export function CalendarReport({ data }) {
+export function CalendarReport({ data, className }) {
     let types = [[
         {
             type: "date",
@@ -22,12 +23,14 @@ export function CalendarReport({ data }) {
     data = types.concat(data);
     console.log(data);
     return (
-        <Chart
-            chartType="Calendar"
-            width="100%"
-            height="100%"
-            data={data}
-            options={options}
-        />
+        <div className={clsx("flex flex-col justify-center items-center w-full", className)}>
+            <Chart
+                chartType="Calendar"
+                width="100%"
+                height="100%"
+                data={data}
+                options={options}
+            />
+        </div>
     );
 }
