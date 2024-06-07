@@ -4,6 +4,12 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+![screenshot of dashboard](/public/sample-dashboard.png)
+![screenshot of appointments](/public/sample-appointments.png)
+![screenshot of vacations](/public/sample-vacations.png)
+![screenshot of patients](/public/sample-patients.png)
+![screenshot of physicians](/public/sample-physicians.png)
+
 ## Prerequisites
 - [Node.js](https://nodejs.org/en)
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
