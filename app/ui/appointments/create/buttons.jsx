@@ -1,4 +1,6 @@
+'use client';
 import Link from 'next/link';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 export function Next() {
@@ -13,10 +15,23 @@ export function Next() {
     );
 }
 
-export function Select({ id }) {
+export function SelectPatient({ id }) {
     return (
         <Link
             href={`/dashboard/appointments/${id}/create`}
+            className="rounded-md border p-2 hover:bg-gray-100"
+        >
+            <ArrowRightIcon className="w-5" />
+        </Link>
+    );
+}
+
+
+export function SelectPhysician({ pid }) {
+    const pathname = usePathname();
+    return (
+        <Link
+            href={`${pathname.replace(/create/, "")}/${pid}/create`}
             className="rounded-md border p-2 hover:bg-gray-100"
         >
             <ArrowRightIcon className="w-5" />

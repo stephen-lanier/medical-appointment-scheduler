@@ -440,10 +440,10 @@ export async function createPhysician(formData) {
     redirect(`/dashboard/physicians?query=${name}`);
 }
 
-export async function createAppointment(id, formData) {
+export async function createAppointment(id, pid, formData) {
     noStore();
     const db_name = await getPatientName(id);
-    const physicianid = formData.get('physicianid');
+    const physicianid = pid;
     const date = formData.get('date');
     const starttime = formData.get('starttime');
     let connection = mysql.createConnection(connectionConfig);
