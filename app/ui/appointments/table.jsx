@@ -9,8 +9,8 @@ export default async function Table({ patient, physician, date }) {
         <div className="py-10">
             <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Appointments for <b>{patient}</b></h1>
             <div className="relative overflow-auto shadow-md sm:rounded-lg mx-5 max-h-96">
-                <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">
+                <table className="w-full text-base text-left rtl:text-right text-gray-500">
+                    <thead className=" text-gray-700 uppercase bg-gray-200 p-0">
                         <tr>
                             <th scope='col' className='px-6 py-3 tracking-widest'>Patient</th>
                             <th scope='col' className='px-6 py-3 tracking-widest'>Physician</th>
@@ -25,7 +25,7 @@ export default async function Table({ patient, physician, date }) {
                     </thead>
                     <tbody>
                         {apptsData.map(x => {
-                            return (<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            return (<tr className="bg-white border-b">
                                 <td className='px-6 py-3'>{x.PatientID}: {x.PatientName}</td>
                                 <td className='px-6 py-3'>{x.PhysicianID}: {x.PhysicianName}</td>
                                 <td className='px-6 py-3'>{x.Date.toDateString()}</td>
