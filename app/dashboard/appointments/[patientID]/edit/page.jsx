@@ -10,7 +10,7 @@ import { updateAppointment } from '@/app/server';
 
 export default async function Page({ params }) {
 
-    const id = params.id;
+    const id = params.patientID;
     const updateAppointmentWithID = updateAppointment.bind(null, id);
 
     return (

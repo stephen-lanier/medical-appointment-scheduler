@@ -11,8 +11,8 @@ import { createAppointment } from '@/app/server';
 
 export default async function Page({ params }) {
 
-    const patientID = params.patient;
-    const physicianID = params.physician;
+    const patientID = params.patientID;
+    const physicianID = params.physicianID;
     const createAppointmentWithID = createAppointment.bind(null, patientID, physicianID);
 
     return (

@@ -422,7 +422,7 @@ export async function createPatient(formData) {
     console.log(results[0])
     connection.end();
     revalidatePath('/dashboard/patients');
-    redirect(`/dashboard/patients?query=${name}`);
+    redirect(`/dashboard/patients?patient=${name}`);
 }
 
 export async function createPhysician(formData) {
@@ -468,7 +468,7 @@ export async function createAppointment(patientID, physicianID, formData) {
         console.log(results[0].insertId)
         connection.end();
         revalidatePath('/dashboard/appointments');
-        redirect(`/dashboard/appointments?query=${db_name}`);
+        redirect(`/dashboard/appointments?patient=${db_name}`);
     } catch (error) {
         connection.end();
         console.log(error);
@@ -535,7 +535,7 @@ export async function updatePatient(id, formData) {
     let results = await connection.promise().query(sql);
     connection.end();
     revalidatePath('/dashboard/patients');
-    redirect(`/dashboard/patients?query=${db_name}`);
+    redirect(`/dashboard/patients?patient=${db_name}`);
 }
 
 export async function updatePhysician(id, formData) {
@@ -600,7 +600,7 @@ export async function updateAppointment(id, formData) {
     let db_name = await getPatientName(results2[0][0].patientid)
     connection.end();
     revalidatePath('/dashboard/appointments');
-    redirect(`/dashboard/appointments?query=${db_name}`);
+    redirect(`/dashboard/appointments?patient=${db_name}`);
 }
 
 export async function updateVacation(id, formData) {
