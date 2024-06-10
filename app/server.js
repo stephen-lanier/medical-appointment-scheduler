@@ -143,7 +143,7 @@ export async function getSpecializations(name) {
     return results[0];
 }
 
-export async function getAppts(username) {
+export async function getAppts(patientName, physicianName, date) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
@@ -159,9 +159,16 @@ export async function getAppts(username) {
     join patients pa
     using (patientid)
     where pa.name like ?
+    and p.name like ? 
+    ${date ? 'and date = ? ' : ''}
     order by pa.name, p.name, date desc, starttime desc, endtime desc
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql, ['%' + username + '%']);
+    let vals = [patientName, physicianName];
+    vals = vals.map(x => '%' + x + '%');
+    if (date) {vals.push(date);}
+    console.log(sql);
+    console.log(vals);
+    let results = await connection.promise().query(sql, vals);
     console.log(results[0]);
     connection.end();
     return results[0];

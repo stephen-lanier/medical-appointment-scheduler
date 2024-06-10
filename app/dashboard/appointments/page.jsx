@@ -5,15 +5,17 @@ import { CreateAppointment } from '@/app/ui/appointments/buttons';
 
 export default async function Page({ searchParams }) {
 
-    const patientName = searchParams?.query || '';
+    const patientName = searchParams?.patient || '';
+    const physicianName = searchParams?.physician || '';
+    const date = searchParams?.date || '';
 
     return (
         <main className="font-mono text-slate-800 p-5 bg-slate-50 rounded-2xl uppercase">
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                <Search patientName={patientName} />
+                <Search />
                 <CreateAppointment />
             </div>
-            <Table query={patientName} />
+            <Table patient={patientName} physician={physicianName} date={date} />
         </main>
     );
 }

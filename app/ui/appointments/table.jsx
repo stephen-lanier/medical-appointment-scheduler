@@ -1,13 +1,13 @@
 import { getAppts } from "@/app/server";
 import { UpdateAppointment, DeleteAppointment } from "./buttons";
 
-export default async function Table({ query }) {
+export default async function Table({ patient, physician, date }) {
 
-    const apptsData = await getAppts(query);
+    const apptsData = await getAppts(patient, physician, date);
 
     return (
         <div className="py-10">
-            <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Appointments for <b>{query}</b></h1>
+            <h1 className="block-inline uppercase tracking-widest text-3xl p-10">Appointments for <b>{patient}</b></h1>
             <div className="relative overflow-auto shadow-md sm:rounded-lg mx-5 max-h-96">
                 <table className="w-full text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className=" text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 p-0">
