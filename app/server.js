@@ -447,10 +447,9 @@ export async function createPhysician(formData) {
     redirect(`/dashboard/physicians?query=${name}`);
 }
 
-export async function createAppointment(id, pid, formData) {
+export async function createAppointment(patientID, physicianID, formData) {
     noStore();
-    const db_name = await getPatientName(id);
-    const physicianid = pid;
+    const db_name = await getPatientName(patientID);
     const date = formData.get('date');
     const starttime = formData.get('starttime');
     let connection = mysql.createConnection(connectionConfig);
@@ -465,7 +464,7 @@ export async function createAppointment(id, pid, formData) {
     values (?, ?, ?, ?, ADDTIME(?, 3000))`;
     console.log(sql);
     try {
-        let results = await connection.promise().query(sql, [id, physicianid, date, starttime, starttime]);
+        let results = await connection.promise().query(sql, [patientID, physicianID, date, starttime, starttime]);
         console.log(results[0].insertId)
         connection.end();
         revalidatePath('/dashboard/appointments');

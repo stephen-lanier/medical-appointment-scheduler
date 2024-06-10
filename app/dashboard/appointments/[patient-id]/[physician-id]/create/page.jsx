@@ -11,10 +11,9 @@ import { createAppointment } from '@/app/server';
 
 export default async function Page({ params }) {
 
-    const id = params.id;
-    const pid = params.pid;
-    console.log(id, pid);
-    const createAppointmentWithID = createAppointment.bind(null, id, pid);
+    const patientID = params.patient;
+    const physicianID = params.physician;
+    const createAppointmentWithID = createAppointment.bind(null, patientID, physicianID);
 
     return (
         <main className="font-mono text-slate-800 p-5 bg-slate-50 rounded-2xl uppercase">

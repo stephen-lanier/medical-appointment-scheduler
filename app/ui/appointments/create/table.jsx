@@ -27,7 +27,7 @@ export async function PatientTable({ query }) {
                                 <td className='px-6 py-3'>{x.ContactInfo}</td>
                                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                     <div className="flex justify-end gap-3">
-                                        <SelectPatient id={x.PatientID} />
+                                        <SelectPatient patientID={x.PatientID} />
                                     </div>
                                 </td>
                             </tr>);
@@ -67,7 +67,7 @@ export async function PhysicianTable({ query }) {
                                 <td className='px-6 py-3'>{x.ContactInfo}</td>
                                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                     <div className="flex justify-end gap-3">
-                                        <SelectPhysician pid={x.PhysicianID} />
+                                        <SelectPhysician physicianID={x.PhysicianID} />
                                     </div>
                                 </td>
                             </tr>);

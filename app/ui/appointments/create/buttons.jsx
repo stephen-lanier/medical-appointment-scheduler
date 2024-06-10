@@ -15,10 +15,10 @@ export function Next() {
     );
 }
 
-export function SelectPatient({ id }) {
+export function SelectPatient({ patientID }) {
     return (
         <Link
-            href={`/dashboard/appointments/${id}/create`}
+            href={`/dashboard/appointments/${patientID}/create`}
             className="rounded-md border p-2 hover:bg-gray-100"
         >
             <ArrowRightIcon className="w-5" />
@@ -27,11 +27,11 @@ export function SelectPatient({ id }) {
 }
 
 
-export function SelectPhysician({ pid }) {
+export function SelectPhysician({ physicianID }) {
     const pathname = usePathname();
     return (
         <Link
-            href={`${pathname.replace(/create/, "")}/${pid}/create`}
+            href={`${pathname.replace(/create/, "")}/${physicianID}/create`}
             className="rounded-md border p-2 hover:bg-gray-100"
         >
             <ArrowRightIcon className="w-5" />
