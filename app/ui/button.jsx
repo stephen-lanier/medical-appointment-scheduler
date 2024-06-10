@@ -1,4 +1,4 @@
-import clsx rom 'clsx';
+import clsx from 'clsx';
 
 export default function Button({ children, className, ...rest }) {
   return (
