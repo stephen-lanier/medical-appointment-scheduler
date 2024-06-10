@@ -8,7 +8,7 @@ export default async function Page({ searchParams }) {
     const patientName = searchParams?.query || '';
 
     return (
-        <main className="font-mono text-slate-800 p-5 bg-slate-50 rounded-2xl uppercase">
+        <main className="font-mono text-slate-800 p-5 bg-slate-100 rounded-2xl uppercase">
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
             <Search name={patientName} />
             <CreatePatient />

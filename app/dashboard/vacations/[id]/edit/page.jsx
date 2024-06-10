@@ -18,7 +18,7 @@ export default async function Page({ params }) {
     const updateVacationWithID = updateVacation.bind(null, id);
 
     return (
-        <main className="font-mono text-slate-800 p-5 bg-slate-50 rounded-2xl uppercase">
+        <main className="font-mono text-slate-800 p-5 bg-slate-100 rounded-2xl uppercase">
             <div className="flex">
                 {/* <h1>Create Vacation</h1> */}
                 <form action={updateVacationWithID}>

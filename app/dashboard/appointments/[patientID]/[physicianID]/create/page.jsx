@@ -16,7 +16,7 @@ export default async function Page({ params }) {
     const createAppointmentWithID = createAppointment.bind(null, patientID, physicianID);
 
     return (
-        <main className="font-mono text-slate-800 p-5 bg-slate-50 rounded-2xl uppercase">
+        <main className="font-mono text-slate-800 p-5 bg-slate-100 rounded-2xl uppercase">
             <div className="flex">
                 {/* <h1>Create Appointment</h1> */}
                 <form action={createAppointmentWithID}>
