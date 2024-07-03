@@ -101,7 +101,7 @@ export async function getPatients(name) {
     return results[0];
 }
 
-export async function getPhysicians(name) {
+export async function getPhysicians(physician, specialization, contact) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function (err) {
@@ -115,9 +115,15 @@ export async function getPhysicians(name) {
     join specializations
     using (specializationid)
     where name like ? 
+    ${specialization ? 'and description like ? ' : ''} 
+    ${contact ? 'and contactInfo like ?' : ''}
     order by name, physicianid
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql, ['%' + name + '%']);
+    let vals = [physician];
+    if (specialization) {vals.push(specialization)}
+    if (contact) {vals.push(contact)}
+    vals = vals.map(x => '%' + x + '%');
+    let results = await connection.promise().query(sql, vals);
     console.log(results[0]);
     connection.end();
     return results[0];
