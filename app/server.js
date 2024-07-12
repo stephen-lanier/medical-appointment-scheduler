@@ -244,7 +244,8 @@ export async function getVacations(name) {
         }
         console.log('connected to database!');
     });
-    let sql = `select * from vacations v
+    let sql = `select v.VacationID as ID, p.name as Physician, StartDate, EndDate, Reason as Description, VacationStatus as Status
+    from vacations v
     join physicians p
     using (physicianid)
     where p.name like ?

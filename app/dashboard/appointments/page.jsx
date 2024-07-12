@@ -1,9 +1,8 @@
 import Search from '../../ui/appointments/search';
-// import Table from '../../ui/appointments/table';
 import ResultsTable from '@/app/ui/results-table';
 import { getAppts } from '@/app/server';
-import { CreateAppointment } from '@/app/ui/appointments/buttons';
 import {
+    CreateAppointment,
     UpdateAppointment,
     DeleteAppointment,
 } from '@/app/ui/appointments/buttons';
