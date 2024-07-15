@@ -1,9 +1,16 @@
 import Search from '../../ui/patients/search';
-import Table from '../../ui/patients/table';
-import { CreatePatient } from '@/app/ui/patients/buttons';
+import ResultsTable from '@/app/ui/results-table';
+import {
+  CreatePatient,
+  UpdatePatient,
+  DeletePatient,
+} from '@/app/ui/patients/buttons';
+import { getPatients } from '@/app/server';
 
 export default async function Page({ searchParams }) {
   const patientName = searchParams?.query || '';
+  const searchFields = [patientName];
+  const resultFields = ['ID', 'Patient', 'Date of Birth', 'Contact Info'];
 
   return (
     <main className='rounded-2xl bg-slate-100 p-5 font-mono uppercase text-slate-800'>
@@ -11,7 +18,13 @@ export default async function Page({ searchParams }) {
         <Search name={patientName} />
         <CreatePatient />
       </div>
-      <Table query={patientName} />
+      <ResultsTable
+        searchFields={searchFields}
+        resultFields={resultFields}
+        getFcn={getPatients}
+        UpdateButton={UpdatePatient}
+        DeleteButton={DeletePatient}
+      />
     </main>
   );
 }

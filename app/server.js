@@ -92,7 +92,8 @@ export async function getPatients(name) {
         }
         console.log('connected to database!');
     });
-    let sql = `select * from patients 
+    let sql = `select PatientID as ID, name as Patient, DOB as 'Date of Birth', ContactInfo as 'Contact Info'
+    from patients 
     where name like ? 
     order by name, patientid
     limit ${SEARCH_LIMIT}`;

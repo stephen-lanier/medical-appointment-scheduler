@@ -2,39 +2,39 @@ import Search from '../../ui/vacations/search';
 import ResultsTable from '@/app/ui/results-table';
 import { getVacations } from '@/app/server';
 import {
-  CreateVacation,
-  UpdateVacation,
-  DeleteVacation,
+    CreateVacation,
+    UpdateVacation,
+    DeleteVacation,
 } from '@/app/ui/vacations/buttons';
 import { ClockIcon, CheckIcon } from '@heroicons/react/24/outline';
 
 export default async function Page({ searchParams }) {
-  const physicianName = searchParams?.query || '';
-  const searchFields = [physicianName];
-  const resultFields = [
-    'ID',
-    'Physician',
-    'StartDate',
-    'EndDate',
-    'Description',
-    'Status',
-  ];
+    const physicianName = searchParams?.query || '';
+    const searchFields = [physicianName];
+    const resultFields = [
+        'ID',
+        'Physician',
+        'StartDate',
+        'EndDate',
+        'Description',
+        'Status',
+    ];
 
-  return (
-    <main className='rounded-2xl bg-slate-100 p-5 font-mono uppercase text-slate-800'>
-      <div className='mt-4 flex items-center justify-between gap-2 md:mt-8'>
-        <Search physicianName={physicianName} />
-        <CreateVacation />
-      </div>
-      <ResultsTable
-        searchFields={searchFields}
-        resultFields={resultFields}
-        getFcn={getVacations}
-        UpdateButton={UpdateVacation}
-        DeleteButton={DeleteVacation}
-      />
-    </main>
-  );
+    return (
+        <main className='rounded-2xl bg-slate-100 p-5 font-mono uppercase text-slate-800'>
+            <div className='mt-4 flex items-center justify-between gap-2 md:mt-8'>
+                <Search physicianName={physicianName} />
+                <CreateVacation />
+            </div>
+            <ResultsTable
+                searchFields={searchFields}
+                resultFields={resultFields}
+                getFcn={getVacations}
+                UpdateButton={UpdateVacation}
+                DeleteButton={DeleteVacation}
+            />
+        </main>
+    );
 }
 /*
                   <td className='px-6 py-3'>
