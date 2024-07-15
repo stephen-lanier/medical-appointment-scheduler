@@ -113,7 +113,8 @@ export async function getPhysicians(physician, specialization, contact) {
         }
         console.log('connected to database!');
     });
-    let sql = `select * from physicians 
+    let sql = `select PhysicianID as ID, name as Physician, Description as Specialization, ContactInfo as 'Contact Info'
+    from physicians 
     join specializations
     using (specializationid)
     where name like ? 
