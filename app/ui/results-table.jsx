@@ -9,7 +9,7 @@ export default async function ResultsTable({
     return (
         <div className='py-10'>
             <h1 className='block-inline p-10 text-3xl uppercase tracking-widest'>
-                Searching for <b>{searchFields.filter(el => el).join(',')}</b>
+                Searching for <b>{searchFields.filter((el) => el).join(',')}</b>
             </h1>
             <div className='relative mx-5 max-h-96 overflow-auto shadow-md sm:rounded-lg'>
                 <table className='w-full text-left text-base text-gray-500 rtl:text-right'>
