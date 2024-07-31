@@ -82,7 +82,7 @@ export async function getAppointmentCount() {
     return results[0][0];
 }
 
-export async function getPatients(name) {
+export async function getPatients(patient, dob, contact) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function(err) {
@@ -95,12 +95,22 @@ export async function getPatients(name) {
     let sql = `select PatientID as ID, name as Patient, DOB as 'Date of Birth', ContactInfo as 'Contact Info'
     from patients 
     where name like ? 
+    ${contact ? 'and contactinfo like ?' : ''}
+    ${dob ? 'and dob = ?' : ''}
     order by name, patientid
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql, ['%' + name + '%']);
-    console.log(results[0]);
+    let vals = [patient];
+    if (contact) { 
+        vals.push(contact); 
+    }
+    vals = vals.map((x) => '%' + x + '%');
+    if (dob) { 
+        vals.push(dob); 
+    }
+    let [results, fields] = await connection.promise().query(sql, vals);
+    console.log(results);
     connection.end();
-    return results[0];
+    return results;
 }
 
 export async function getPhysicians(physician, specialization, contact) {
