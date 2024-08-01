@@ -100,12 +100,12 @@ export async function getPatients(patient, dob, contact) {
     order by name, patientid
     limit ${SEARCH_LIMIT}`;
     let vals = [patient];
-    if (contact) { 
-        vals.push(contact); 
+    if (contact) {
+        vals.push(contact);
     }
     vals = vals.map((x) => '%' + x + '%');
-    if (dob) { 
-        vals.push(dob); 
+    if (dob) {
+        vals.push(dob);
     }
     let [results, fields] = await connection.promise().query(sql, vals);
     console.log(results);
@@ -246,7 +246,7 @@ export async function getAgesAppointments() {
     return results[0];
 }
 
-export async function getVacations(name) {
+export async function getVacations(physician, date, status) {
     noStore();
     let connection = mysql.createConnection(connectionConfig);
     connection.connect(function(err) {
@@ -261,12 +261,25 @@ export async function getVacations(name) {
     join physicians p
     using (physicianid)
     where p.name like ?
+    ${status ? 'and vacationstatus like ?' : ''}
+    ${date ? 'and startdate <= ? and enddate >= ?' : ''}
     order by p.name, startdate desc, enddate desc
     limit ${SEARCH_LIMIT}`;
-    let results = await connection.promise().query(sql, ['%' + name + '%']);
-    console.log(results[0]);
+    let vals = [physician];
+    if (status) {
+        vals.push(status);
+    }
+    vals = vals.map((x) => '%' + x + '%');
+    if (date) {
+        vals.push(date);
+        vals.push(date);
+    }
+    console.log(sql);
+    console.log(vals);
+    let [results, fields] = await connection.promise().query(sql, vals);
+    console.log(results);
     connection.end();
-    return results[0];
+    return results;
 }
 
 export async function getPatientName(id) {
